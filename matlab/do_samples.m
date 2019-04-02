@@ -28,7 +28,7 @@ for i=1:ln
     if algor=='NN'
         ulayers = [10,10]; % train with 2 hidden layers, 10 hidden units each
         [net, res, mse, test_res] = do_fitnet(ulayers, datn, zn, test_dat);
-    else if algor=='RF'
+    elseif algor=='RF'
         [mdl, res, mse, test_res] = do_fitrensemble(datn, zn, test_dat);
     end
 
