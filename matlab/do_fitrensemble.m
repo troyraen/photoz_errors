@@ -5,7 +5,7 @@ function [mdl, res, mse, test_res] = do_fitrensemble(data, target, test_data)
 % test_data is matrix of test data
 
 % mdl = fitrensemble(data,target, 'OptimizeHyperparameters','auto');
-mdl = fitrensemble(data,target, 'Method','Bag', 'MinLeafSize',1);
+mdl = fitrensemble(data,target, 'Method','Bag');
 
 res = predict(mdl, data);
 
