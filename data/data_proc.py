@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 
 cols = ['id','redshift','tu','tg','tr','ti','tz','ty', 'u10','uerr10','g10','gerr10','r10','rerr10','i10','ierr10','z10','zerr10','y10','yerr10']
-ccols = ['id','redshift','tu','tu_m_tg','tg_m_tr','tr_m_ti','ti_m_tz','tz_m_ty']
+# ccols = ['id','redshift','tu','tu_m_tg','tg_m_tr','tr_m_ti','ti_m_tz','tz_m_ty']
+ccols = ['id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10',
+            'i10_m_z10','z10_m_y10']
 
 def calc_colors(df):
 	global cols
@@ -16,8 +18,7 @@ def calc_colors(df):
 	for i in range(len(clbls)):
 		nm = clbls[i]
 		# get mags to be subtracted
-		rdnm = nm[0:2]
-		blnm = nm[-2:]
+		rdnm, __, blnm = clbls[i].split('_')
 		# write color column
 		cdf[nm] = df[rdnm]-df[blnm]
 
@@ -41,7 +42,11 @@ def load_from_file(which='sample'):
 
 	df.columns = cols
 
+	print('Loaded data from {}'.format(cat_fnm))
+	print('df columns = {}'.format(cols))
+
 	return df
+df = dp.load_from_file(which='all')
 
 
 def correlations(dowhat='load', df=None):
