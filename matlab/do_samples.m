@@ -26,7 +26,7 @@ for i=1:ln
     zn = specz(nm1:nm1+n-1);
 
     if algor=='NN'
-        ulayers = [10,10]; % train with 2 hidden layers, 10 hidden units each
+        ulayers = [15,15,15]; % train with len(ulayers) hidden layers, # hidden units each
         [net, res, mse, test_res] = do_fitnet(ulayers, datn, zn, test_dat);
     elseif algor=='RF'
         [mdl, res, mse, test_res] = do_fitrensemble(datn, zn, test_dat);
