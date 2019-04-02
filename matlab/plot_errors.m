@@ -29,4 +29,4 @@ ylabel(ax2,'# Outliers');
 % xlabel(ax3,'Training Sample Size');
 % ylabel(ax3,'Mean Squred Error');
 
-saveas(111,strcat('data/errs',algor,'.png'))
+saveas(111,strcat('plots/errs',algor,'.png'))
