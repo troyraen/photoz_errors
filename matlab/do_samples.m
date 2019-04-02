@@ -36,4 +36,4 @@ for i=1:ln
     errs
 end
 
-plot_errors(errs);
+plot_errors(errs, algor);
