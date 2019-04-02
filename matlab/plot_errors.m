@@ -20,7 +20,7 @@ ylabel(ax1,'NMAD');
 ax2 = subplot(1,2,2);
 semilogx(ax2,ss,errs(:,3))
 xlabel(ax2,'Training Sample Size');
-ylabel(ax2,'Fraction of 10% Outliers');
+ylabel(ax2,'10% Outlier Fraction');
 
 
 % figure(113)

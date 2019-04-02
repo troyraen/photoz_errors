@@ -1,5 +1,5 @@
 function [net, res, mse, test_res] = do_fitnet(ulayers, data, target, test_data)
-% ulayers = e.g. [10,12] builds network with 2 hidden layers 
+% ulayers = e.g. [10,12] builds network with 2 hidden layers
 %                           with 10, 12 units respectively
 % data should be matrix (rows=examples, columns=attributes)
 % target should be 1 x Nexamples with correct answer
