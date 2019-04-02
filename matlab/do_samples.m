@@ -3,7 +3,8 @@ function [errs] = do_samples(dat, specz, test_dat, test_specz, numruns, algor)
 % specz and test_specz = n x 1 (true redshifts)
 % numruns = number of training runs to do
 %           sample sizes log spaced in [1000, length(specz)]
-% algor = 'NN' does neural nets using do_fitnet
+% algor =   'NN' does neural nets using do_fitnet
+%           'RF' does random forest using do_fitrensemble
 
 l = length(specz);
 nsamp = uint16(logspace(log10(1000),log10(l),numruns));
@@ -21,12 +22,14 @@ for i=1:ln
         nm1=1;
     end
     datn = dat(nm1:nm1+n-1,:);
-    length(datn)
+    length(datn);
     zn = specz(nm1:nm1+n-1);
 
     if algor=='NN'
         ulayers = [10,10]; % train with 2 hidden layers, 10 hidden units each
         [net, res, mse, test_res] = do_fitnet(ulayers, datn, zn, test_dat);
+    else if algor=='RF'
+        [mdl, res, mse, test_res] = do_fitrensemble(datn, zn, test_dat);
     end
 
     [NMAD, out10] = calc_zerrors(test_specz, test_res);
