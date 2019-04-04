@@ -10,9 +10,9 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 %%%%% MAKE SURE THESE MATCH WHAT WAS WRITTEN USING data_proc.py %%%%%
 
 
-Nsampszs = 20;
+Nsampszs = 5;
 max_sampsz = 300000;
-Nruns = 10;
+Nruns = 5;
 
 %%% Neural Nets
 [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN')
