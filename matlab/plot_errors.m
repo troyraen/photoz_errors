@@ -1,13 +1,14 @@
-function [] = plot_errors(errs, algor)
+function [] = plot_errors(errs, algor, Nruns)
 % errs = n (samples) x 4 matrix.
 %       column 1 = sample size, 2 = NMAD, 3 = out10, 4 = mse
 % algor = string indicating which algorithm is plotted
+% Nruns = number of runs per sample size
 % Plots NMAD and out10 vs sample size
 
 ss = errs(:,1);
 
 figure(111)
-title(strcat('Algorithm: ',algor))
+title(strcat('Algorithm: ',algor, 'Runs/sample size: ',Nruns))
 
 % ax1 = subplot(1,3,1);
 ax1 = subplot(1,2,1);

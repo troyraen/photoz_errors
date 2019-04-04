@@ -11,13 +11,14 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10',
 
 
 Nsampszs = 10;
+max_sampsz = 300000;
 Nruns = 2;
 
 %%% Neural Nets
-[errs] = do_samples(Nsampszs, Nruns, 'NN')
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN')
 
 %%% Random Forest
-[errs] = do_samples(Nsampszs, Nruns, 'RF')
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF')
 
 
 %%%% OLD:
