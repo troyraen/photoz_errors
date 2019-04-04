@@ -1,8 +1,7 @@
-function [errs] = do_samples(numruns, algor)
-% numruns = [Nsampszs, Nruns]
-%           Nsampszs = number of training sample sizes to test,
-%                       log spaced in [1000, length(specz)].
-%           Nruns = number of trainings per sample size, results are pooled.
+function [errs] = do_samples(Nsampszs, Nruns, algor)
+% Nsampszs = number of training sample sizes to test,
+%               log spaced in [1000, length(specz)].
+% Nruns = number of trainings per sample size, results are pooled.
 % algor =   'NN' does neural nets using do_fitnet
 %           'RF' does random forest using do_fitrensemble
 % loads data from file, see base_path and base_file below
@@ -28,11 +27,8 @@ clear tmp
 %%
 
 %% Setup:
-Nsampszs = numruns(1);
-Nruns = numruns(2);
 nsamps = uint16(logspace(log10(1000),log10(l),Nsampszs));
 % nsamp=[1000, 2500, 5000, 10000, 15000, 20000];
-
 errs = zeros(Nsampszs,4); % column 1 = sample size, 2 = NMAD, 3 = out10, 4 = mse
 errs(:,1) = nsamp';
 %%
