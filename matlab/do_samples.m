@@ -31,7 +31,7 @@ clear tmp
 nsamps = uint16(logspace(log10(1000),log10(max_sampsz),Nsampszs));
 % nsamp=[1000, 2500, 5000, 10000, 15000, 20000];
 errs = zeros(Nsampszs,4); % column 1 = sample size, 2 = NMAD, 3 = out10, 4 = mse
-errs(:,1) = nsamp';
+errs(:,1) = nsamps';
 %%
 
 
@@ -42,8 +42,8 @@ for i=1:Nsampszs
     %% do Nruns for this sample size
     abs_dev = [];
     for nr=1:Nruns
-        datn = dat(1+(nr-1)*n:rn*n,:);
-        zn = specz(1+(nr-1)*n:rn*n);
+        datn = dat(1+(nr-1)*n:nr*n,:);
+        zn = specz(1+(nr-1)*n:nr*n);
         length(zn)
 
         if algor=='NN'
