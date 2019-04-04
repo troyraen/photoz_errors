@@ -67,5 +67,40 @@ yerr10 & 0.45 \\ \hline
 \end{center}
 
 
+??? 
+several runs with same sample size and pool abs(photz - specz)./(1+specz)
+
+NMAD = 1.48* median(abs(photz - specz)./(1+specz))
+out10 = sum(abs(photz - specz)./(1+specz) > 0.1)/N
+
+Features to use? Just observed colors + 1 mag = 6 features.
+How are errors computed? Not sure. Should I use them in algorithm? Not without checking, if they are calculated from true magnitudes, then no.
+
+
+general algorithms vs specific codes
+algorithms: 
+	* neural net 
+	* random forest
+	* k nearest neighbor
+	* XG boost (variant of decision trees) python implementation (possibly use 'AdaBoostM1' in matlab: https://www.mathworks.com/matlabcentral/answers/423851-is-there-any-implementation-of-xgboost-algorithm-for-decision-trees-in-matlab)
+	* ANNz2
+	relevance vector machine
+
+???
+
+
+
+
+
+To Do:
+create data files with colors
+run RF and NN for several sample sizes and plot
+
+
+fitrensemble optimization:
+Method Bag
+NumLearningCycles 495
+LearnRate NaN
+MinLeafSize 1
 
 \end{document}
