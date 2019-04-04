@@ -32,4 +32,4 @@ res = res'; % transpose to column vector
 
 %% check test data
 test_res = net(test_data');
-test_res = test_res';
+test_res = test_res'; % transpose to column vector

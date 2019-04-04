@@ -1,3 +1,4 @@
+# import data_proc as dp # import this module
 import pandas as pd
 import numpy as np
 
@@ -5,6 +6,27 @@ cols = ['id','redshift','tu','tg','tr','ti','tz','ty', 'u10','uerr10','g10','ger
 # ccols = ['id','redshift','tu','tu_m_tg','tg_m_tr','tr_m_ti','ti_m_tz','tz_m_ty']
 ccols = ['id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10',
             'i10_m_z10','z10_m_y10']
+Ntot = 3804010 # all the rows
+
+def load_from_file(which='all'):
+	global cols
+
+	if which=='all':
+		cat_fnm = 'Catalog_Graham+2018_10YearPhot.dat'
+		df = pd.DataFrame( np.array( pd.read_csv(cat_fnm,delim_whitespace=True,comment='#',header=None) ) )#,nrows=nrows
+
+	if which=='sample':
+		cat_fnm = 'CGsample.dat'
+		df = pd.DataFrame( np.array( pandas.read_csv(cat_fnm,delim_whitespace=True,comment='#',header=None) ) )
+
+	df.columns = cols
+
+	print('Loaded data from {}'.format(cat_fnm))
+	print('df columns = {}'.format(cols))
+
+	return df
+# df = dp.load_from_file(which='all')
+
 
 def calc_colors(df):
 	global cols
@@ -23,30 +45,7 @@ def calc_colors(df):
 		cdf[nm] = df[rdnm]-df[blnm]
 
 	return cdf
-
-# cdf = calc_colors(df)
-
-
-
-def load_from_file(which='sample'):
-	global cols
-
-	if which=='all':
-		# nrows = 3804010 # all the rows
-		cat_fnm = 'Catalog_Graham+2018_10YearPhot.dat'
-		df = pd.DataFrame( np.array( pd.read_csv(cat_fnm,delim_whitespace=True,comment='#',header=None) ) )#,nrows=nrows
-
-	if which=='sample':
-		cat_fnm = 'CGsample.dat'
-		df = pd.DataFrame( np.array( pandas.read_csv(cat_fnm,delim_whitespace=True,comment='#',header=None) ) )
-
-	df.columns = cols
-
-	print('Loaded data from {}'.format(cat_fnm))
-	print('df columns = {}'.format(cols))
-
-	return df
-df = dp.load_from_file(which='all')
+# cdf = dp.calc_colors(df)
 
 
 def correlations(dowhat='load', df=None):
@@ -66,12 +65,14 @@ def correlations(dowhat='load', df=None):
 
 def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 	# store a smaller sample
+    global Ntot
 
 	randdf = df.sample(frac=1).reset_index(drop=True) # randomize rows
 
 	for i in range(nfiles):
 		csampf = '{basenm}{n}.{fmt}'.format(basenm=basenm,n=i,fmt=fmt)
-		csamp = randdf.loc[i*nsamp:(i+1)*nsamp-1]
+        end_loc = (i+1)*nsamp-1 if ( (i+1)*nsamp-1 < Ntot) else Ntot
+		csamp = randdf.loc[i*nsamp:end_loc]
 
 		hdr=True
 		idx=True
@@ -80,5 +81,7 @@ def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 			idx=False
 
 		csamp.to_csv(csampf, header=hdr, index=idx)
-
-# write_sample(cdf,basenm='colors',nsamp=30000)
+	return 0
+# dp.write_sample(cdf,basenm='colors',nsamp=30000)
+# dp.write_sample(cdf, nfiles=3, nsamp=1000000, fmt='mtxt', basenm='colors')
+sand.write_sample(cdf, nfiles=2, nsamp=3000000, fmt='mtxt', basenm='colors')

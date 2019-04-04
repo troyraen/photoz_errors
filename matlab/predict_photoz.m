@@ -7,6 +7,22 @@ cols = {'redshift','tu','tg','tr','ti','tz','ty',
 % ccols = {'id','redshift','tu','tu_m_tg','tg_m_tr','tr_m_ti','ti_m_tz','tz_m_ty'}
 ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10',
             'i10_m_z10','z10_m_y10'};
+%%%%% MAKE SURE THESE MATCH WHAT WAS WRITTEN USING data_proc.py %%%%%
+
+
+Nsampszs = 10;
+Nruns = 2;
+
+%%% Neural Nets
+[errs] = do_samples(Nsampszs, Nruns, 'NN')
+
+%%% Random Forest
+[errs] = do_samples(Nsampszs, Nruns, 'RF')
+
+
+%%%% OLD:
+
+
 
 %%
 % training data
