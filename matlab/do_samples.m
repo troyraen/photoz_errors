@@ -28,7 +28,7 @@ clear tmp
 %%
 
 %% Setup:
-nsamps = uint16(logspace(log10(1000),log10(max_sampsz),Nsampszs));
+nsamps = uint32(logspace(log10(1000),log10(max_sampsz),Nsampszs));
 % nsamp=[1000, 2500, 5000, 10000, 15000, 20000];
 errs = zeros(Nsampszs,4); % column 1 = sample size, 2 = NMAD, 3 = out10, 4 = mse
 errs(:,1) = nsamps';
@@ -44,7 +44,7 @@ for i=1:Nsampszs
     for nr=1:Nruns
         datn = dat(1+(nr-1)*n:nr*n,:);
         zn = specz(1+(nr-1)*n:nr*n);
-        length(zn)
+        len_zn = length(zn)
 
         if algor=='NN'
             ulayers = [15,15,15]; % train with len(ulayers) hidden layers, # hidden units each
