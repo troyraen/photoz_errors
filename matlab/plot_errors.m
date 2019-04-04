@@ -30,4 +30,6 @@ ylabel(ax2,'10% Outlier Fraction');
 % xlabel(ax3,'Training Sample Size');
 % ylabel(ax3,'Mean Squred Error');
 
-saveas(111,strcat('plots/errs',algor,'.png'))
+fout = strcat('plots/errs',algor,'.png')
+~ = py.helper_fncs.file_ow(fout); % rename existing file
+saveas(111,fout)

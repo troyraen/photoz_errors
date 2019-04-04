@@ -5,7 +5,7 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor)
 % Nruns = number of trainings per sample size, results are pooled.
 % algor =   'NN' does neural nets using do_fitnet
 %           'RF' does random forest using do_fitrensemble
-% loads data from file, see base_path and base_file below
+% loads data from file, see base_path and fdat below
 
 
 %% Load data:
@@ -13,14 +13,16 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor)
 %           These must be the same as in data_proc.py!
 test_N = 100000;
 base_path = '/home/tjr63/Documents/photoz_errors/data/';
-base_file = 'colors';
+fdat = 'colors';
+ferrs = strcat('errors',algor','.mtxt');
 
-tmp = load(strcat(base_path,base_file,'0.mtxt')); % training data
+
+tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
 dat = tmp(:,3:end);
 specz = tmp(:,2);
 N = length(specz); % number of training examples
 
-tmp = load(strcat(base_path,base_file,'1.mtxt')); % test data
+tmp = load(strcat(base_path,fdat,'1.mtxt')); % test data
 test_dat = tmp(1:test_N,3:end);
 test_specz = tmp(1:test_N,2);
 
@@ -30,7 +32,7 @@ clear tmp
 %% Setup:
 nsamps = uint32(logspace(log10(1000),log10(max_sampsz),Nsampszs));
 % nsamp=[1000, 2500, 5000, 10000, 15000, 20000];
-errs = zeros(Nsampszs,4); % column 1 = sample size, 2 = NMAD, 3 = out10, 4 = mse
+errs = zeros(Nsampszs,4); % column 1:sample size, 2:NMAD, 3:out10, 4:mse
 errs(:,1) = nsamps';
 %%
 
@@ -54,9 +56,9 @@ for i=1:Nsampszs
         end
 
         ad = calc_absdev(test_specz, test_photz);
-        size_ad = size(ad) % check this
+        % size_ad = size(ad) % check this
         abs_dev = cat(1,abs_dev, ad); % pool this for all runs for this n
-        size_abs_dev = size(abs_dev) % check this
+        % size_abs_dev = size(abs_dev) % check this
     end
     %%
 
@@ -68,4 +70,8 @@ for i=1:Nsampszs
 end
 %%
 
+%% Save errors and plots
+~ = py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
+save(ferrs, errs, '-ascii');
 plot_errors(errs, algor, Nruns);
+%%
