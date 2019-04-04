@@ -71,7 +71,7 @@ end
 %%
 
 %% Save errors and plots
-~ = py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
+% py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
 save(ferrs, errs, '-ascii');
 plot_errors(errs, algor, Nruns);
 %%
