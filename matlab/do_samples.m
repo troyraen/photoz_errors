@@ -14,7 +14,7 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor)
 test_N = 100000;
 base_path = '/home/tjr63/Documents/photoz_errors/data/';
 fdat = 'colors';
-ferrs = strcat('errors',algor','.mtxt');
+ferrs = strcat('errors',algor,'.mtxt');
 
 
 tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
@@ -72,6 +72,6 @@ end
 
 %% Save errors and plots
 % py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
-save(ferrs, 'errs', '-ascii');
+save(strcat(base_path,ferrs), 'errs', '-ascii');
 plot_errors(errs, algor, Nruns);
 %%
