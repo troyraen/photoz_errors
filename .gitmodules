@@ -1,0 +1,3 @@
+[submodule "ANNZ"]
+	path = ANNZ
+	url = git@github.com:troyraen/ANNZ
