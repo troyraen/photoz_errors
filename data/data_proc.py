@@ -6,7 +6,7 @@ cols = ['id','redshift','tu','tg','tr','ti','tz','ty', 'u10','uerr10','g10','ger
 # ccols = ['id','redshift','tu','tu_m_tg','tg_m_tr','tr_m_ti','ti_m_tz','tz_m_ty']
 ccols = ['id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10',
             'i10_m_z10','z10_m_y10']
-Ntot = 3804010 # all the rows
+Ntot = 3804010 # Number of samples in Catalog_Graham+2018_10YearPhot.dat
 
 def load_from_file(which='all'):
 	global cols
@@ -63,6 +63,23 @@ def correlations(dowhat='load', df=None):
 	return 0
 
 
+def write_sample_GPz(fout='CG_GPz.mtxt'):
+    # Format cat_fnm for use with GPz
+    # GPz req's columns [m_1,m_2,..,m_k,e_1,e_2,...,e_k,z_spec]
+    df = dp.load_from_file(which='all')
+
+    gpz_cols = ['u10','g10','r10','i10','z10','y10', \
+                'uerr10','gerr10','rerr10','ierr10','zerr10','yerr10', \
+                'redshift']
+
+    df = df.iloc[1:10]
+    hdr = True
+    idx = False
+    df.to_csv(fout, columns=gpz_cols, header=hdr, index=idx)
+
+    return None
+
+
 def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 	# store a smaller sample
     global Ntot
@@ -84,4 +101,4 @@ def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 	return 0
 # dp.write_sample(cdf,basenm='colors',nsamp=30000)
 # dp.write_sample(cdf, nfiles=3, nsamp=1000000, fmt='mtxt', basenm='colors')
-sand.write_sample(cdf, nfiles=2, nsamp=3000000, fmt='mtxt', basenm='colors')
+# dp.write_sample(cdf, nfiles=2, nsamp=3000000, fmt='mtxt', basenm='colors')
