@@ -1,3 +1,6 @@
 [submodule "ANNZ"]
 	path = ANNZ
 	url = git@github.com:troyraen/ANNZ
+[submodule "GPz"]
+	path = GPz
+	url = https://github.com/troyraen/GPz
