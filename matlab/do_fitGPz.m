@@ -111,8 +111,20 @@ rmse = sqrt(metrics(Y(testing),mu,sigma,@(y,mu,sigma) (y-mu).^2));
 % fraction of data where |z_spec-z_phot|/(1+z_spec)<0.10
 fr10 = metrics(Y(testing),mu,sigma,@(y,mu,sigma) 100*(abs(y-mu)./(y+1)<0.10));
 
+%-------------------------------------------------------------
+% Above here is almost exclusively from GPz/demo_photoz.m.
+% Below here is my calculations.
+%-------------------------------------------------------------
+
 
 mdl = [];
 res = [];
 mse = rmse.^2;
 test_res = mu;
+
+
+% Check whether my calculations give the same results as GPz
+zdev = calc_zdev(Y(testing), test_res);
+[NMAD, out10] = calc_zerrors(zdev);
+
+out10_eql = fr10 == out10
