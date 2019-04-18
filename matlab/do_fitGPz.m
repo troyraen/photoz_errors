@@ -1,4 +1,4 @@
-function [mdl, res, mse, test_res] = do_fitGPz(dataPath, maxIter, Nexamples)
+function [other, test_specz, mse, test_photz] = do_fitGPz(dataPath, maxIter, Nexamples)
 % Computes photozs using the GPz algorithm available at
 %   https://github.com/troyraen/GPz (forked from OxfordML/GPz).
 %   Most of this function is taken from the file GPz/demo_photoz.m
@@ -10,8 +10,7 @@ function [mdl, res, mse, test_res] = do_fitGPz(dataPath, maxIter, Nexamples)
 %
 % Example usage:
 %   % from matlab dir
-%   [mdl, res, mse, test_res] = do_fitGPz('../GPz/data/sdss_sample.csv')
-%   %!! mdl and res are currently set to []
+%   [test_specz, mse, test_photz] = do_fitGPz('../GPz/data/sdss_sample.csv')
 %
 
 
@@ -111,20 +110,24 @@ rmse = sqrt(metrics(Y(testing),mu,sigma,@(y,mu,sigma) (y-mu).^2));
 % fraction of data where |z_spec-z_phot|/(1+z_spec)<0.10
 fr10 = metrics(Y(testing),mu,sigma,@(y,mu,sigma) 100*(abs(y-mu)./(y+1)<0.10));
 
+
+
 %-------------------------------------------------------------
 % Above here is almost exclusively from GPz/demo_photoz.m.
 % Below here is my calculations.
 %-------------------------------------------------------------
 
 
-mdl = [];
-res = [];
+test_specz = Y(testing);
 mse = rmse.^2;
-test_res = mu;
-
+test_photz = mu;
 
 % Check whether my calculations give the same results as GPz
-zdev = calc_zdev(Y(testing), test_res);
+zdev = calc_zdev(test_specz, test_photz);
 [NMAD, out10] = calc_zerrors(zdev);
+diff_frout10 = (100-fr10(end))/100 - out10
+other = [out10, diff_frout10]
+% out10 = 0.0260 on the default dataset, N train examples = 100000. Matches fr10.
 
-out10_eql = fr10 == out10
+
+end
