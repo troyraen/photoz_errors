@@ -72,13 +72,12 @@ def write_sample_GPz(fout='CG_GPz.mtxt'):
                 'uerr10','gerr10','rerr10','ierr10','zerr10','yerr10', \
                 'redshift']
 
-    df = df.iloc[1:10]
-    hdr = True
+    hdr = False
     idx = False
     df.to_csv(fout, columns=gpz_cols, header=hdr, index=idx)
 
     return None
-
+# dp.write_sample_GPz()
 
 def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 	# store a smaller sample
