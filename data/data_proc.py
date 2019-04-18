@@ -66,7 +66,7 @@ def correlations(dowhat='load', df=None):
 def write_sample_GPz(fout='CG_GPz.mtxt'):
     # Format cat_fnm for use with GPz
     # GPz req's columns [m_1,m_2,..,m_k,e_1,e_2,...,e_k,z_spec]
-    df = dp.load_from_file(which='all')
+    df = load_from_file(which='all')
 
     gpz_cols = ['u10','g10','r10','i10','z10','y10', \
                 'uerr10','gerr10','rerr10','ierr10','zerr10','yerr10', \
@@ -84,21 +84,22 @@ def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 	# store a smaller sample
     global Ntot
 
-	randdf = df.sample(frac=1).reset_index(drop=True) # randomize rows
+    randdf = df.sample(frac=1).reset_index(drop=True) # randomize rows
 
-	for i in range(nfiles):
-		csampf = '{basenm}{n}.{fmt}'.format(basenm=basenm,n=i,fmt=fmt)
+    for i in range(nfiles):
+        csampf = '{basenm}{n}.{fmt}'.format(basenm=basenm,n=i,fmt=fmt)
         end_loc = (i+1)*nsamp-1 if ( (i+1)*nsamp-1 < Ntot) else Ntot
-		csamp = randdf.loc[i*nsamp:end_loc]
+        csamp = randdf.loc[i*nsamp:end_loc]
 
-		hdr=True
-		idx=True
-		if fmt=='mtxt': # strip index and header
-			hdr=False
-			idx=False
+        hdr=True
+        idx=True
+        if fmt=='mtxt': # strip index and header
+            hdr=False
+            idx=False
 
-		csamp.to_csv(csampf, header=hdr, index=idx)
-	return 0
+        csamp.to_csv(csampf, header=hdr, index=idx)
+
+    return None
 # dp.write_sample(cdf,basenm='colors',nsamp=30000)
 # dp.write_sample(cdf, nfiles=3, nsamp=1000000, fmt='mtxt', basenm='colors')
 # dp.write_sample(cdf, nfiles=2, nsamp=3000000, fmt='mtxt', basenm='colors')
