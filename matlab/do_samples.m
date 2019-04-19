@@ -13,13 +13,13 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 %-------------------------------------------------------------
 %% Load data:
 % ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10','i10_m_z10','z10_m_y10'};
-%           These must be the same as in data_proc.py!
+%           !!! These must be the same as in data_proc.py !!!!
 fprintf('\nSetting up for algorithm %2s\n', algor)
 test_N = 100000; % test sample size
-base_path = '/home/tjr63/Documents/photoz_errors/data/';
 fdat = 'colors'; % data file prefix
-ferrs = strcat('errors',algor,'.mtxt'); % file name to save errors
-fplt = strcat(base_path,'errors',algor,'.png'); % file name to save errors plot
+base_path = '/home/tjr63/Documents/photoz_errors/';
+ferrs = strcat(base_path,'data/errors',algor,'.mtxt'); % file name to save errors
+fplt = strcat(base_path,'plots/errors',algor,'.png'); % file name to save errors plot
 
 
 if ~strcmp(algor,'GPz')
@@ -34,11 +34,12 @@ if ~strcmp(algor,'GPz')
 
     clear tmp
 
-else % GPz params
-    % aparams = [fdat, maxIter, fplt]
+else % GPz
+    % aparams = [fdat, maxIter, fplt, GPz_params]
     fdat = aparams{1};
     maxIter = aparams{2};
     fplt = aparams{3};
+    GPz_params = aparams{4}; % = {heteroscedastic, csl_method, maxAttempts}
 
 end
 %%
@@ -77,7 +78,8 @@ for i=1:Nsampszs
 
         elseif strcmp(algor,'GPz')
             Nexamples = [n, n, test_N]; % [training,validation,testing]
-            [other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
+            [other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples, GPz_params);
+            other % check this
 
         end
 
@@ -98,6 +100,6 @@ end
 %-------------------------------------------------------------
 %% Save errors and plots
 % py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
-save(strcat(base_path,ferrs), 'errs', '-ascii');
+save(ferrs, 'errs', '-ascii');
 plot_errors(errs, algor, Nruns, fplt);
 %%

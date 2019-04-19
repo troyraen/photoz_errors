@@ -1,4 +1,4 @@
-function [other, test_specz, mse, test_photz] = do_fitGPz(dataPath, maxIter, Nexamples)
+function [other, test_specz, mse, test_photz] = do_fitGPz(dataPath, maxIter, Nexamples, params)
 % Computes photozs using the GPz algorithm available at
 %   https://github.com/troyraen/GPz (forked from OxfordML/GPz).
 %   Most of this function is taken from the file GPz/demo_photoz.m
@@ -7,6 +7,7 @@ function [other, test_specz, mse, test_photz] = do_fitGPz(dataPath, maxIter, Nex
 %   Required format is specified below.
 % maxIter = int. maximum number of iterations.
 % Nexamples = vector of ints. # examples in datasets: [training,validation,testing].
+% params = cell array. {heteroscedastic, csl_method, maxAttempts}
 %
 % Example usage:
 %   % from matlab dir
@@ -27,12 +28,12 @@ m = 100;                                % number of basis functions to use [requ
 method = 'VD';                          % select a method, options = GL, VL, GD, VD, GC and VC [required]
 
 
-heteroscedastic = true;                 % learn a heteroscedastic noise process, set to false if only interested in point estimates [default=true]
+heteroscedastic = params{1}; % true;                 % learn a heteroscedastic noise process, set to false if only interested in point estimates [default=true]
 
 normalize = true;                       % pre-process the input by subtracting the means and dividing by the standard deviations [default=true]
 
 % maxIter = 500;                          % maximum number of iterations [default=200]
-maxAttempts = 50;                       % maximum iterations to attempt if there is no progress on the validation set [default=infinity]
+maxAttempts = params{3}; % 50;                       % maximum iterations to attempt if there is no progress on the validation set [default=infinity]
 
 
 % trainSplit = 0.2;                       % percentage of data to use for training
@@ -41,7 +42,7 @@ maxAttempts = 50;                       % maximum iterations to attempt if there
 
 inputNoise = true;                      % false = use mag errors as additional inputs, true = use mag errors as additional input noise
 
-csl_method = 'normal';                  % cost-sensitive learning option: [default='normal']
+csl_method = params{2}; % 'normal';                  % cost-sensitive learning option: [default='normal']
                                         %       'balanced':     to weigh
                                         %       rare samples more heavily during training
                                         %       'normalized':   assigns an error cost for each sample = 1/(z+1)
