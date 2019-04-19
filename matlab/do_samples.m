@@ -74,7 +74,7 @@ for i=1:Nsampszs
         elseif algor=='RF'
             [mdl, photz, mse, test_photz] = do_fitrensemble(datn, zn, test_dat);
 
-        elseif algor='GPz'
+        elseif algor=='GPz'
             Nexamples = [n, n, test_N]; % [training,validation,testing]
             [test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
 
