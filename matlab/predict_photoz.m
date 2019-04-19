@@ -1,4 +1,4 @@
-cd /home/tjr63/Documents/photoz_errors/matlab/
+% cd /home/tjr63/Documents/photoz_errors/matlab/
 
 cols = {'redshift','tu','tg','tr','ti','tz','ty', ...
         'u10','uerr10','g10','gerr10','r10','rerr10', ...
@@ -12,14 +12,14 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 
 Nsampszs = 5;
 max_sampsz = 30000;
-Nruns = 1;
+Nruns = 3;
 
 %%% Neural Nets
-'DOING NEURAL NETS'
+% 'DOING NEURAL NETS'
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', [])
 
 %%% Random Forest
-'DOING RANDOM FOREST'
+% 'DOING RANDOM FOREST'
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF', [])
 
 %%% GPz
