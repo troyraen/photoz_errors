@@ -125,8 +125,8 @@ test_photz = mu;
 % Check whether my calculations give the same results as GPz
 zdev = calc_zdev(test_specz, test_photz);
 [NMAD, out10] = calc_zerrors(zdev);
-diff_frout10 = (100-fr10(end))/100 - out10
-other = [out10, diff_frout10]
+diff_frout10 = (100-fr10(end))/100 - out10;
+other = [out10, diff_frout10];
 % out10 = 0.0260 on the default dataset, N train examples = 100000. Matches fr10.
 
 

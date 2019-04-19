@@ -1,3 +1,9 @@
+**/.DS_Store
 **/*.dat
 **/*.gz
 **/*.tar
+**/*report.log
+final_report/*.aux
+final_report/*.fdb_latexmk
+final_report/*.fls
+/external_codes/rongpu/

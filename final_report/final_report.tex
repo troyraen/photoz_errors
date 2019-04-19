@@ -1,11 +1,13 @@
+% fs document setup
 \documentclass[13pt]{amsart}
+% \documentclass[useAMS,usenatbib]{mnras}
 \usepackage[margin=0.75in]{geometry} % see geometry.pdf on how to lay out the page. There's lots.
 \geometry{a4paper} % or letter or a5paper or ... etc
 % \geometry{landscape} % rotated page geometry
 \usepackage{amsmath}
 %\PassOptionsToPackage{pdfpagelabels=false}{hyperref}
 %\usepackage[figure,figure*]{hypcap}
-\usepackage[dvipsnames]{xcolor} 
+\usepackage[dvipsnames]{xcolor}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{subcaption}
@@ -18,64 +20,93 @@
 \author{Troy Raen}
 %\date{} % delete this line to display the current date
 
-%%--------------------------------------------------------------------------------------------------------
+%%--------------------------------------------------------------------
 % MACROS
 % \newcommand{\Msun}{\mathrm{M}_{\odot}} % Msun/h
 % \newcommand{\hw}[1]{{\color{TealBlue}[HW #1]}}
 \newcommand{\Q}[1]{{\color{gray}\textbf{#1}}}
 \newcommand{\p}[2]{\vspace{5mm} \textbf{#1: }{\color{gray}\textbf{#2}}}
 
-%--------------------------------------------------------------------------------------------------------
+%%--------------------------------------------------------------------
 %%% BEGIN DOCUMENT
 \begin{document}
 
 \maketitle
 %\tableofcontents
 
+% fe document setup
 
 
-\section{Problem Outline}
+\begin{abstract}
+  In this work I study how the errors in photoz estimates scale with the size of the training set for various machine learning algorithms. A 'photoz' is an estimate of the redshift of a particular object (usually a star or a galaxy) that uses photometric data.
+\end{abstract}
 
 
-\section{Data Analysis}
+\section{Introduction and Related Work}
+
+It is well established that the light reaching our telescopes from distant galaxies is shifted toward the red end of the spectrum (relative to the frequency it was originally emitted at, this is called a 'redshift' and is usually denoted by $z$), and that the magnitude of this shift increases with the galaxy's distance from us. The combined measurements from many galaxies indicate that the universe itself (the space between galaxies) is expanding at a rate that increases with time. The precise calculation of this expansion rate is being pursued and it depends strongly on our ability to make accurate calculations/estimations of the amount by which the light from a distant galaxy is redshifted. (Actually, the calculations of all fundamental quantities in cosmology rely heavily on understanding these redshifts.)
+
+The calculation of the redshift from measurements of light intensity generally depends on being able to find known features in the intensity as a function of frequency. Poor frequency resolution then increases the error on an estimation of the redshift.
+
+There are two ways in which telescopes can take measurements: spectroscopy and photometry. Spectroscopy records information about the amount of light coming in over a wide range of the frequency spectrum, at high resolution. Photometry essentially divides the spectrum into a small number of bins (on the order of 5) and records aggregated information for each bin. Thus photometry is much cheaper to do and so we have more data of this type. However, this low resolution translates into large errors on our estimates of redshift using this data. (A redshift calculated in this way is called a 'photo-z'.)
+
+Various machine learning algorithms have been used to estimate photozs, with neural nets and random forest regressors showing the most success.
 
 
-\begin{center}
-\begin{tabular}{|l|c|}
-\multicolumn{2}{c}{} \\ \hline 
- & Correlations with Redshift \\ \hline
-redshift & 1.0 \\ \hline
-tu & \textbf{0.4551} \\ \hline
-tg & 0.1438 \\ \hline
-tr & 0.2717 \\ \hline
-ti & 0.3933 \\ \hline
-tz & 0.4234 \\ \hline
-ty & 0.4136 \\ \hline
-u10 & 0.3932 \\ \hline
-uerr10 & \textbf{0.518} \\ \hline
-g10 & 0.1435 \\ \hline
-gerr10 & 0.06651 \\ \hline
-r10 & 0.2716 \\ \hline
-rerr10 & 0.1222 \\ \hline
-i10 & 0.3931 \\ \hline
-ierr10 & 0.3822 \\ \hline
-z10 & 0.423 \\ \hline
-zerr10 & \textbf{0.4605} \\ \hline
-y10 & 0.4109 \\ \hline
-yerr10 & 0.45 \\ \hline
-\end{tabular}
-\end{center}
+  \subsection{Dataset}
 
-10 runs with same sample size and pool abs(photz - specz)./(1+specz) for stats.
+    I use the dataset \texttt{Catalog\_Graham+2018\_10YearPhot} which consists of simulated, photometric telescope data for $\sim3 \times 10^{6}$ galaxies. The dataset includes the correct redshift for each galaxy, so this is a supervised, regression problem.
 
-NMAD = 1.48* median(abs(photz - specz)./(1+specz))
-out10 = sum(abs(photz - specz)./(1+specz) > 0.1)/N
+    Features: Previous algorithms have had more success by transforming the features. This transformation is motivated by physics,   Motivated by the physics in play and the history of success in previous ML algorithms, it is customary to perform a feature transformation to galaxy 'colors' by subtracting the raw measurements/features pair-wise. I will not give the detail
+
+    The simulated data is intended to mimic the data anticipated from the upcoming Large Synoptic Survey Telescope (LSST). LSST will collect data from large volumes of the sky and at rates several orders of magnitude above any other telescope to date. The community is making large efforts towards dealing with data at this scale, and one of these efforts is toward quick and accurate photo-z calculations. Codes using machine learning algorithms are beginning ($\sim$2000) to be used for these calculations.
 
 
-Features to use? Just observed colors + 1 mag = 6 features.
-How are errors computed? Not sure. Should I use them in algorithm? Not without checking, if they are calculated from true magnitudes, then no.
+    \begin{center}
+    \begin{tabular}{|l|c|}
+      \multicolumn{2}{c}{} \\ \hline
+       & Correlations with Redshift \\ \hline
+      redshift & 1.0 \\ \hline
+      tu & \textbf{0.4551} \\ \hline
+      tg & 0.1438 \\ \hline
+      tr & 0.2717 \\ \hline
+      ti & 0.3933 \\ \hline
+      tz & 0.4234 \\ \hline
+      ty & 0.4136 \\ \hline
+      u10 & 0.3932 \\ \hline
+      uerr10 & \textbf{0.518} \\ \hline
+      g10 & 0.1435 \\ \hline
+      gerr10 & 0.06651 \\ \hline
+      r10 & 0.2716 \\ \hline
+      rerr10 & 0.1222 \\ \hline
+      i10 & 0.3931 \\ \hline
+      ierr10 & 0.3822 \\ \hline
+      z10 & 0.423 \\ \hline
+      zerr10 & \textbf{0.4605} \\ \hline
+      y10 & 0.4109 \\ \hline
+      yerr10 & 0.45 \\ \hline
+    \end{tabular}
+    \end{center}
 
 
+\section{Methodology}
+  10 runs with same sample size and pool abs(photz - specz)./(1+specz) for stats.
+
+  NMAD = 1.48* median(abs(photz - specz)./(1+specz))
+  out10 = sum(abs(photz - specz)./(1+specz) > 0.1)/N
+
+
+
+\section{Experimental Results}
+
+
+
+
+\section{Analysis of Results and Discussion}
+
+
+
+\section{Conclusion}
 
 
 \end{document}
