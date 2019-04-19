@@ -15,10 +15,13 @@ max_sampsz = 30000;
 Nruns = 5;
 
 %%% Neural Nets
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN')
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', [])
 
 %%% Random Forest
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF')
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF', [])
 
-
-% nohup matlab predict_photoz.m > pp.out &
+%%% GPz
+% fdat = '../GPz/data/sdss_sample.csv'
+fdat = '../data/CG_GPz.mtxt'
+maxIter = 250
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', [fdat, maxIter])

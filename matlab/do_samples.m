@@ -1,10 +1,12 @@
-function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor)
+function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 % Nsampszs = number of training sample sizes to test,
 %               log spaced in [1000, length(specz)].
 % max_sampsz = max number for sample size
 % Nruns = number of trainings per sample size, results are pooled.
 % algor =   'NN' does neural nets using do_fitnet
 %           'RF' does random forest using do_fitrensemble
+%           'GPz'
+% aparams = [parameters for algor]
 % loads data from file, see base_path and fdat below
 
 
@@ -12,23 +14,32 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor)
 %% Load data:
 % ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10','i10_m_z10','z10_m_y10'};
 %           These must be the same as in data_proc.py!
-fprintf('\nLoading data for algorithm %2s\n', algor)
 test_N = 100000; % test sample size
-base_path = '/home/tjr63/Documents/photoz_errors/data/';
-fdat = 'colors'; % data file prefix
-ferrs = strcat('errors',algor,'.mtxt'); % file name to save errors
+
+if algor ~= 'GPz'
+    fprintf('\nLoading data for algorithm %2s\n', algor)
+    base_path = '/home/tjr63/Documents/photoz_errors/data/';
+    fdat = 'colors'; % data file prefix
+    ferrs = strcat('errors',algor,'.mtxt'); % file name to save errors
 
 
-tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
-dat = tmp(:,3:end);
-specz = tmp(:,2);
-N = length(specz); % number of training examples
+    tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
+    dat = tmp(:,3:end);
+    specz = tmp(:,2);
+    N = length(specz); % number of training examples
 
-tmp = load(strcat(base_path,fdat,'1.mtxt')); % test data
-test_dat = tmp(1:test_N,3:end);
-test_specz = tmp(1:test_N,2);
+    tmp = load(strcat(base_path,fdat,'1.mtxt')); % test data
+    test_dat = tmp(1:test_N,3:end);
+    test_specz = tmp(1:test_N,2);
 
-clear tmp
+    clear tmp
+
+else
+    % aparams = [fdat, maxIter]
+    fdat = aparams(1);
+    maxIter = aparams(2);
+
+end
 %%
 
 %-------------------------------------------------------------
@@ -50,15 +61,23 @@ for i=1:Nsampszs
     zdev = []; % pool results of calc_zdev() for Nruns
     for nr=1:Nruns
         fprintf('Doing run %2f\n', nr)
-        datn = dat(1+(nr-1)*n:nr*n,:);
-        zn = specz(1+(nr-1)*n:nr*n);
-        len_zn = length(zn);
+        if algor ~= 'GPz'
+            datn = dat(1+(nr-1)*n:nr*n,:);
+            zn = specz(1+(nr-1)*n:nr*n);
+            len_zn = length(zn);
+        end
 
         if algor=='NN'
             ulayers = [15,15,15]; % train with len(ulayers) hidden layers, # hidden units each
             [net, photz, mse, test_photz] = do_fitnet(ulayers, datn, zn, test_dat);
+
         elseif algor=='RF'
             [mdl, photz, mse, test_photz] = do_fitrensemble(datn, zn, test_dat);
+
+        elseif algor='GPz'
+            Nexamples = [n, n, test_N]; % [training,validation,testing]
+            [test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
+
         end
 
         zd = calc_zdev(test_specz, test_photz);
@@ -72,7 +91,6 @@ for i=1:Nsampszs
     errs(i,2) = NMAD;
     errs(i,3) = out10;
     errs(i,4) = mse;
-    errs
 end
 %%
 
