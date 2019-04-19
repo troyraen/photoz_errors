@@ -119,7 +119,7 @@ fr10 = metrics(Y(testing),mu,sigma,@(y,mu,sigma) 100*(abs(y-mu)./(y+1)<0.10));
 
 
 test_specz = Y(testing);
-mse = sum(rmse.^2;)
+mse = sum(rmse.^2);
 test_photz = mu;
 
 % Check whether my calculations give the same results as GPz
