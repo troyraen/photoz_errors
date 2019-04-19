@@ -13,14 +13,14 @@ clf('reset')
 
 % ax1 = subplot(1,3,1);
 ax1 = subplot(1,2,1);
-semilogx(ax1,ss,errs(:,2))
+semilogx(ax1,ss,errs(:,2), '-ob')
 xlabel(ax1,'Training Sample Size');
 ylabel(ax1,'NMAD');
 
 
 % ax2 = subplot(1,3,2);
 ax2 = subplot(1,2,2);
-semilogx(ax2,ss,errs(:,3))
+semilogx(ax2,ss,errs(:,3), '-ob')
 xlabel(ax2,'Training Sample Size');
 ylabel(ax2,'10% Outlier Fraction');
 
