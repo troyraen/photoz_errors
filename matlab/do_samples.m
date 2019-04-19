@@ -99,7 +99,8 @@ end
 
 %-------------------------------------------------------------
 %% Save errors and plots
-% py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
+command = strcat("python -c $'import helper_fncs as hf; hf.file_ow(\'",ferrs,"\')'");
+status = system(command);
 save(ferrs, 'errs', '-ascii');
 plot_errors(errs, algor, Nruns, fplt);
 %%

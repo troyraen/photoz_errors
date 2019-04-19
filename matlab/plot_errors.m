@@ -17,7 +17,7 @@ ydat = errs(:,2);
 semilogx(ax1,ss,ydat, 'ob')
 hold on;
 % Find and plot polynomial fit
-x = linspace(min(ss), max(ss), 100);
+x = linspace(min(ss), max(ss), 10000);
 fun = @(c,x) c(1) + c(2).*x.^c(3);
 c0 = [0.02, 0.5, -0.5];
 % coef = lsqcurvefit(fun,c0,ss,ydat)
@@ -56,9 +56,9 @@ ylabel(ax2,'10% Outlier Fraction');
 % ylabel(ax3,'Mean Squred Error');
 
 sgtitle(strcat('Algorithm: ',algor, '. Runs/sample size: ',num2str(Nruns)))
-if isa(fout,'char')
-    % fout = strcat('plots/errs',algor,'.png');
-    % py.helper_fncs.file_ow(fout); % rename existing file
+if isa(fout,'char') % save plot
+    command = strcat("python -c $'import helper_fncs as hf; hf.file_ow(\'",fout,"\')'");
+    status = system(command);
     saveas(111,fout)
 end
 
