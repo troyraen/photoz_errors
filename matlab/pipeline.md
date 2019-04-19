@@ -37,9 +37,24 @@ cdf = dp.calc_colors(df)
 ```
 <!-- fe ## Save errors to color data files -->
 
+## somethin
+```Matlab
+fdat = '../data/CG_GPz.mtxt';
+maxIter = 50;
+Nexamples = [10000, 10000, 10000];
+[test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
+zd = calc_zdev(test_specz, test_photz);
+zdev = []; % pool results of calc_zdev() for Nruns
+zdev = cat(1,zdev, zd); % pool this for all runs for this n
+size(zdev)
+```
+
 ## Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
 ```Matlab
+
+
+
 fdat = '../data/CG_GPz.mtxt';
 Nexamples = [100000, 100000, 100000];
 maxIter = 200;
@@ -48,8 +63,19 @@ other % = [out10, diff_frout10]
 zdev = calc_zdev(test_specz, test_photz);
 [NMAD, out10] = calc_zerrors(zdev) % = (0.0424, 0.1584 maxIter50); , 0.1189
 ```
+![Default Settings](plots/GPz/Defalts.png)
+- [x] ![csl_method = 'normalized';](plots/GPz/cslNormalized.png)
+    - SIMILAR NMAD, 7% HIGHER OUT10 WITH HIGHER VARIANCE btwn sample sizes
+- [x] ![heteroscedastic = false;](plots/GPz/hskFalse.png)
+    - 2-12% HIGHER NMAD, SIMILAR OUT10
+- [x] ![maxAttempts = 200;](plots/GPz/maxatt200.png)
+    - NO DIFFERENCE
+- [-] ![fdat = '../GPz/data/sdss_sample.csv';]((plots/GPz/SDSSdat.png))
+- [-] ![inputNoise = false;](plots/GPz/inNoiseFalse.png)
 
+- [ ] check that input file was written correctly
 - [ ] try with ugriz only
+
 
 <!-- fe ## Trying to bring down [NMAD, out10] = 0.0424, 0.1584 -->
 

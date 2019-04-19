@@ -1,6 +1,7 @@
 # Questions
 ---
-- [ ]
+- [ ] initialize GPz with constant random seed?
+
 
 
 # To Do:
