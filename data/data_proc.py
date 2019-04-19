@@ -34,7 +34,7 @@ def calc_colors(df):
 	clbls = ccols[3:]
 
 	# instantiate
-	cdf = df.loc[:,['id','redshift','tu']]
+	cdf = df.loc[:,ccols[0:3]]
 
 	# add colors
 	for i in range(len(clbls)):
