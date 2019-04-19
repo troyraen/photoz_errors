@@ -16,7 +16,7 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 %           !!! These must be the same as in data_proc.py !!!!
 fprintf('\nSetting up for algorithm %2s\n', algor)
 test_N = 100000; % test sample size
-fdat = 'colors'; % data file prefix
+fdat = 'CGcolors'; % data file prefix
 base_path = '/home/tjr63/Documents/photoz_errors/';
 ferrs = strcat(base_path,'data/errors',algor,'.mtxt'); % file name to save errors
 fplt = strcat(base_path,'matlab/plots/errors',algor,'.png'); % file name to save errors plot
