@@ -76,7 +76,7 @@ for i=1:Nsampszs
 
         elseif strcmp(algor,'GPz')
             Nexamples = [n, n, test_N]; % [training,validation,testing]
-            [test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
+            [other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
 
         end
 
