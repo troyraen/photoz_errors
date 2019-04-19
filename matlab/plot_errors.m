@@ -21,12 +21,12 @@ x = linspace(min(ss), max(ss), 100);
 fun = @(c,x) c(1) + c(2).*x.^c(3);
 c0 = [0.02, 0.5, -0.5];
 % coef = lsqcurvefit(fun,c0,ss,ydat)
-coef = nlinfit(ss,ydat,fun,c0)
+coef = nlinfit(ss,ydat,fun,c0);
 a = coef(1); b = coef(2); c = coef(3);
-semilogx(ax1,x,a+b.*x.^c,'-g')
-fit = strcat(num2str(round(a,4)),'+',num2str(round(b,1)),'N\^(',num2str(round(c,1)),')')
+semilogx(ax1,x,a+b.*x.^c,'-g');
+fit = strcat(num2str(round(a,4)),'+',num2str(round(b,1)),'N\^(',num2str(round(c,1)),')');
 % Decorate plot
-legend(ax1, {'data', fit}, 'fontsize',18)
+legend(ax1, {'data', fit});
 xlabel(ax1,'Training Sample Size');
 ylabel(ax1,'NMAD');
 
@@ -39,12 +39,12 @@ ydat = errs(:,3);
 semilogx(ax2,ss,ydat, 'ob')
 hold on;
 % Find and plot polynomial fit
-coef = nlinfit(ss,ydat,fun,c0)
+coef = nlinfit(ss,ydat,fun,c0);
 a = coef(1); b = coef(2); c = coef(3);
 semilogx(ax2,x,a+b.*x.^c,'-g')
-fit = strcat(num2str(round(a,4)),'+',num2str(round(b,1)),'N\^(',num2str(round(c,1)),')')
+fit = strcat(num2str(round(a,4)),'+',num2str(round(b,1)),'N\^(',num2str(round(c,1)),')');
 % Decorate plot
-legend(ax2, {'data', fit}, 'fontsize',18)
+legend(ax2, {'data', fit});
 xlabel(ax2,'Training Sample Size');
 ylabel(ax2,'10% Outlier Fraction');
 
