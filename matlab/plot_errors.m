@@ -11,16 +11,40 @@ ss = errs(:,1);
 figure(111)
 clf('reset')
 
-% ax1 = subplot(1,3,1);
 ax1 = subplot(1,2,1);
-semilogx(ax1,ss,errs(:,2), '-ob')
+ydat = errs(:,2);
+% Plot data
+semilogx(ax1,ss,ydat, 'ob')
+hold on;
+% Find and plot polynomial fit
+x = linspace(min(ss), max(ss), 100);
+fun = @(c,x) c(1) + c(2).*x.^c(3);
+c0 = [0.02, 0.5, -0.5];
+% coef = lsqcurvefit(fun,c0,ss,ydat)
+coef = nlinfit(ss,ydat,fun,c0)
+a = coef(1); b = coef(2); c = coef(3);
+semilogx(ax1,x,a+b.*x.^c,'-g')
+fit = strcat(num2str(round(a,4)),'+',num2str(round(b,1)),'N\^(',num2str(round(c,1)),')')
+% Decorate plot
+legend(ax1, {'data', fit}, 'fontsize',18)
 xlabel(ax1,'Training Sample Size');
 ylabel(ax1,'NMAD');
 
 
-% ax2 = subplot(1,3,2);
+
 ax2 = subplot(1,2,2);
-semilogx(ax2,ss,errs(:,3), '-ob')
+% set(gca,'fontsize', 24);
+ydat = errs(:,3);
+% Plot data
+semilogx(ax2,ss,ydat, 'ob')
+hold on;
+% Find and plot polynomial fit
+coef = nlinfit(ss,ydat,fun,c0)
+a = coef(1); b = coef(2); c = coef(3);
+semilogx(ax2,x,a+b.*x.^c,'-g')
+fit = strcat(num2str(round(a,4)),'+',num2str(round(b,1)),'N\^(',num2str(round(c,1)),')')
+% Decorate plot
+legend(ax2, {'data', fit}, 'fontsize',18)
 xlabel(ax2,'Training Sample Size');
 ylabel(ax2,'10% Outlier Fraction');
 
@@ -36,4 +60,7 @@ if isa(fout,'char')
     % fout = strcat('plots/errs',algor,'.png');
     % py.helper_fncs.file_ow(fout); % rename existing file
     saveas(111,fout)
+end
+
+
 end
