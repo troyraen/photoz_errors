@@ -63,6 +63,9 @@ other % = [out10, diff_frout10]
 zdev = calc_zdev(test_specz, test_photz);
 [NMAD, out10] = calc_zerrors(zdev) % = (0.0424, 0.1584 maxIter50); , 0.1189
 ```
+
+![csl_method = 'normalized';](<img src="plots/GPz/cslNormalized.png" alt="csl" width="100"/>)
+
 ![Default Settings](plots/GPz/Defalts.png)
 - [x] ![csl_method = 'normalized';](plots/GPz/cslNormalized.png)
     - SIMILAR NMAD, 7% HIGHER OUT10 WITH HIGHER VARIANCE btwn sample sizes
