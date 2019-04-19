@@ -14,15 +14,13 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 %% Load data:
 % ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10','i10_m_z10','z10_m_y10'};
 %           These must be the same as in data_proc.py!
+fprintf('\nSetting up for algorithm %2s\n', algor)
 test_N = 100000; % test sample size
+base_path = '/home/tjr63/Documents/photoz_errors/data/';
+fdat = 'colors'; % data file prefix
+ferrs = strcat('errors',algor,'.mtxt'); % file name to save errors
 
 if ~strcmp(algor,'GPz')
-    fprintf('\nLoading data for algorithm %2s\n', algor)
-    base_path = '/home/tjr63/Documents/photoz_errors/data/';
-    fdat = 'colors'; % data file prefix
-    ferrs = strcat('errors',algor,'.mtxt'); % file name to save errors
-
-
     tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
     dat = tmp(:,3:end);
     specz = tmp(:,2);
