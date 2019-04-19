@@ -23,12 +23,12 @@ fplt = strcat(base_path,'plots/errors',algor,'.png'); % file name to save errors
 
 
 if ~strcmp(algor,'GPz')
-    tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
+    tmp = load(strcat(base_path,'data/',fdat,'0.mtxt')); % training data
     dat = tmp(:,3:end);
     specz = tmp(:,2);
     N = length(specz); % number of training examples
 
-    tmp = load(strcat(base_path,fdat,'1.mtxt')); % test data
+    tmp = load(strcat(base_path,'data/',fdat,'1.mtxt')); % test data
     test_dat = tmp(1:test_N,3:end);
     test_specz = tmp(1:test_N,2);
 
