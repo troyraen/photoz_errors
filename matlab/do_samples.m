@@ -16,7 +16,7 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 %           These must be the same as in data_proc.py!
 test_N = 100000; % test sample size
 
-if algor ~= 'GPz'
+if ~strcmp(algor,'GPz')
     fprintf('\nLoading data for algorithm %2s\n', algor)
     base_path = '/home/tjr63/Documents/photoz_errors/data/';
     fdat = 'colors'; % data file prefix
@@ -61,20 +61,20 @@ for i=1:Nsampszs
     zdev = []; % pool results of calc_zdev() for Nruns
     for nr=1:Nruns
         fprintf('Doing run %2f\n', nr)
-        if algor ~= 'GPz'
+        if ~strcmp(algor,'GPz')
             datn = dat(1+(nr-1)*n:nr*n,:);
             zn = specz(1+(nr-1)*n:nr*n);
             len_zn = length(zn);
         end
 
-        if algor=='NN'
+        if strcmp(algor,'NN')
             ulayers = [15,15,15]; % train with len(ulayers) hidden layers, # hidden units each
             [net, photz, mse, test_photz] = do_fitnet(ulayers, datn, zn, test_dat);
 
-        elseif algor=='RF'
+        elseif strcmp(algor,'RF')
             [mdl, photz, mse, test_photz] = do_fitrensemble(datn, zn, test_dat);
 
-        elseif algor=='GPz'
+        elseif strcmp(algor,'GPz')
             Nexamples = [n, n, test_N]; % [training,validation,testing]
             [test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
 
