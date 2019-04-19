@@ -12,15 +12,15 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 
 Nsampszs = 5;
 max_sampsz = 30000;
-Nruns = 3;
+Nruns = 5;
 
 %%% Neural Nets
-% 'DOING NEURAL NETS'
-% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', [])
+'DOING NEURAL NETS'
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', [])
 
 %%% Random Forest
-% 'DOING RANDOM FOREST'
-% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF', [])
+'DOING RANDOM FOREST'
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF', [])
 
 %%% GPz
 'DOING GPz'
