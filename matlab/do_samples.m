@@ -6,7 +6,7 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 % algor =   'NN' does neural nets using do_fitnet
 %           'RF' does random forest using do_fitrensemble
 %           'GPz'
-% aparams = [parameters for algor]
+% aparams = {parameters for algor}. see details below
 % loads data from file, see base_path and fdat below
 
 
@@ -19,6 +19,8 @@ test_N = 100000; % test sample size
 base_path = '/home/tjr63/Documents/photoz_errors/data/';
 fdat = 'colors'; % data file prefix
 ferrs = strcat('errors',algor,'.mtxt'); % file name to save errors
+fplt = strcat(base_path,'errors',algor,'.png'); % file name to save errors plot
+
 
 if ~strcmp(algor,'GPz')
     tmp = load(strcat(base_path,fdat,'0.mtxt')); % training data
@@ -32,10 +34,11 @@ if ~strcmp(algor,'GPz')
 
     clear tmp
 
-else
-    % aparams = [fdat, maxIter]
+else % GPz params
+    % aparams = [fdat, maxIter, fplt]
     fdat = aparams{1};
     maxIter = aparams{2};
+    fplt = aparams{3};
 
 end
 %%
@@ -96,5 +99,5 @@ end
 %% Save errors and plots
 % py.helper_fncs.file_ow(strcat(base_path,ferrs)); % rename existing file
 save(strcat(base_path,ferrs), 'errs', '-ascii');
-plot_errors(errs, algor, Nruns, 1);
+plot_errors(errs, algor, Nruns, fplt);
 %%

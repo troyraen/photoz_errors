@@ -1,16 +1,15 @@
-function [] = plot_errors(errs, algor, Nruns, save)
+function [] = plot_errors(errs, algor, Nruns, fout)
 % errs = n (samples) x 4 matrix.
 %       column 1 = sample size, 2 = NMAD, 3 = out10, 4 = mse
 % algor = string indicating which algorithm is plotted
 % Nruns = number of runs per sample size. =-1 for unknown (used to title plot)
-% save = 1 will save plot to file
+% fout = string will save plot to file with this path
 % Plots NMAD and out10 vs sample size
 
 ss = errs(:,1);
 
 figure(111)
 clf('reset')
-sgtitle(strcat('Algorithm: ',algor, '. Runs/sample size: ',num2str(Nruns)))
 
 % ax1 = subplot(1,3,1);
 ax1 = subplot(1,2,1);
@@ -32,8 +31,9 @@ ylabel(ax2,'10% Outlier Fraction');
 % xlabel(ax3,'Training Sample Size');
 % ylabel(ax3,'Mean Squred Error');
 
-if save==1
-    fout = strcat('plots/errs',algor,'.png');
+sgtitle(strcat('Algorithm: ',algor, '. Runs/sample size: ',num2str(Nruns)))
+if isa(fout,'char')
+    % fout = strcat('plots/errs',algor,'.png');
     % py.helper_fncs.file_ow(fout); % rename existing file
     saveas(111,fout)
 end
