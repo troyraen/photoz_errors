@@ -37,52 +37,40 @@ cdf = dp.calc_colors(df)
 ```
 <!-- fe ## Save errors to color data files -->
 
-## somethin
-```Matlab
-fdat = '../data/CG_GPz.mtxt';
-maxIter = 50;
-Nexamples = [10000, 10000, 10000];
-[test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
-zd = calc_zdev(test_specz, test_photz);
-zdev = []; % pool results of calc_zdev() for Nruns
-zdev = cat(1,zdev, zd); % pool this for all runs for this n
-size(zdev)
-```
 
 ## Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
-```Matlab
+Code run from predict_photoz_testGPz.m
 
-
-
-fdat = '../data/CG_GPz.mtxt';
-Nexamples = [100000, 100000, 100000];
-maxIter = 200;
-[other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
-other % = [out10, diff_frout10]
-zdev = calc_zdev(test_specz, test_photz);
-[NMAD, out10] = calc_zerrors(zdev) % = (0.0424, 0.1584 maxIter50); , 0.1189
-```
 - [x] Default Settings
-    - <img src="plots/GPz/Defalts.png" alt="Defaults" width="400"/>
+    - <img src="plots/GPz/Defalts.png" alt="Defaults" width="500"/>
+
+- [x] maxIter = 500;
+    - A BIT BETTER AS TRAINING SIZE INCREASES
+    - <img src="plots/GPz/maxItr500.png" alt="maxItr500" width="500"/>
+    - [x] git add matlab/plots/GPz/maxItr500.png
 
 - [x] csl_method = 'normalized';
     - SIMILAR NMAD, 7% HIGHER OUT10 WITH HIGHER VARIANCE btwn sample sizes
-    - <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="400"/>
+    - <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="500"/>
 
 - [x] heteroscedastic = false;
     - 2-12% HIGHER NMAD, SIMILAR OUT10
-    - <img src="plots/GPz/hskFalse.png" alt="hskFalse" width="400"/>
+    - <img src="plots/GPz/hskFalse.png" alt="hskFalse" width="500"/>
 
 - [x] maxAttempts = 200;
     - NO DIFFERENCE
-    - <img src="plots/GPz/maxatt200.png" alt="maxatt200" width="400"/>
+    - <img src="plots/GPz/maxatt200.png" alt="maxatt200" width="500"/>
 
-- [-] fdat = '../GPz/data/sdss_sample.csv';
-    - <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="400"/>
+- [x] fdat = '../GPz/data/sdss_sample.csv';
+    - BETTER ALL AROUND
+    - <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="500"/>
+    - [x] git add matlab/plots/GPz/SDSSdat.png
 
-- [-] inputNoise = false;
-    - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="400"/>
+- [x] inputNoise = false;
+    - BETTER ALL AROUND
+    - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
+    - [x] git add matlab/plots/GPz/inNoiseFalse.png
 
 
 - [ ] check that input file was written correctly
