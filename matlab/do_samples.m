@@ -36,8 +36,8 @@ if ~strcmp(algor,'GPz')
 
 else
     % aparams = [fdat, maxIter]
-    fdat = aparams(1);
-    maxIter = aparams(2);
+    fdat = aparams{1};
+    maxIter = aparams{2};
 
 end
 %%

@@ -24,4 +24,4 @@ Nruns = 5;
 % fdat = '../GPz/data/sdss_sample.csv'
 fdat = '../data/CG_GPz.mtxt'
 maxIter = 250
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', [fdat, maxIter])
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter})
