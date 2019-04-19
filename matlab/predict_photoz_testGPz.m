@@ -32,19 +32,32 @@ maxIter = 50
 heteroscedastic = true;
 csl_method = 'normal';
 maxAttempts = 50;
-fplt = 'plots/GPz/Defalts.png'
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
-                {heteroscedastic, csl_method, maxAttempts} })
+inputNoise = true;
+% fplt = 'plots/GPz/Defalts.png'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
+%                 {heteroscedastic, csl_method, maxAttempts, inputNoise} })
 
 % specific runs
-fplt = 'plots/GPz/hskFalse.png'
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
-                {false, csl_method, maxAttempts} })
+% fs completed
+%
+% fplt = 'plots/GPz/hskFalse.png'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
+%                 {false, csl_method, maxAttempts} })
+%
+% fplt = 'plots/GPz/cslNormalized.png'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
+%                 {heteroscedastic, 'normalized', maxAttempts} })
+%
+% fplt = 'plots/GPz/maxatt200.png'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
+%                 {heteroscedastic, csl_method, 200} })
+%
+% fe completed
 
-fplt = 'plots/GPz/cslNormalized.png'
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
-                {heteroscedastic, 'normalized', maxAttempts} })
+fplt = 'plots/GPz/SDSSdat.png'
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {'../GPz/data/sdss_sample.csv', maxIter, fplt, ...
+                {heteroscedastic, csl_method, maxAttempts, inputNoise} })
 
-fplt = 'plots/GPz/maxatt200.png'
+fplt = 'plots/GPz/inNoiseFalse.png'
 [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
-                {heteroscedastic, csl_method, 200} })
+                {heteroscedastic, csl_method, maxAttempts, false} })
