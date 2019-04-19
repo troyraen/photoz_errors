@@ -63,15 +63,27 @@ other % = [out10, diff_frout10]
 zdev = calc_zdev(test_specz, test_photz);
 [NMAD, out10] = calc_zerrors(zdev) % = (0.0424, 0.1584 maxIter50); , 0.1189
 ```
-![Default Settings](plots/GPz/Defalts.png)
-- [x] ![csl_method = 'normalized';](plots/GPz/cslNormalized.png)
+- [x] Default Settings
+    - <img src="plots/GPz/Defalts.png" alt="Defaults" width="400"/>
+
+- [x] csl_method = 'normalized';
     - SIMILAR NMAD, 7% HIGHER OUT10 WITH HIGHER VARIANCE btwn sample sizes
-- [x] ![heteroscedastic = false;](plots/GPz/hskFalse.png)
+    - <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="400"/>
+
+- [x] heteroscedastic = false;
     - 2-12% HIGHER NMAD, SIMILAR OUT10
-- [x] ![maxAttempts = 200;](plots/GPz/maxatt200.png)
+    - <img src="plots/GPz/hskFalse.png" alt="hskFalse" width="400"/>
+
+- [x] maxAttempts = 200;
     - NO DIFFERENCE
-- [-] ![fdat = '../GPz/data/sdss_sample.csv';]((plots/GPz/SDSSdat.png))
-- [-] ![inputNoise = false;](plots/GPz/inNoiseFalse.png)
+    - <img src="plots/GPz/maxatt200.png" alt="maxatt200" width="400"/>
+
+- [-] fdat = '../GPz/data/sdss_sample.csv';
+    - <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="400"/>
+
+- [-] inputNoise = false;
+    - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="400"/>
+
 
 - [ ] check that input file was written correctly
 - [ ] try with ugriz only
