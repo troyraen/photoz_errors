@@ -12,7 +12,7 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 
 Nsampszs = 15;
 max_sampsz = 1000000;
-Nruns = 3;
+Nruns = 5;
 
 %%% Neural Nets
 'DOING NEURAL NETS'
