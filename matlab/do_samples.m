@@ -63,12 +63,26 @@ for i=1:Nsampszs
     zdev = []; % pool results of calc_zdev() for Nruns
     for nr=1:Nruns
         fprintf('Doing run %2f\n', nr)
+
+         % Get data subsample (unless doing GPz)
         if ~strcmp(algor,'GPz')
-            datn = dat(1+(nr-1)*n:nr*n,:);
-            zn = specz(1+(nr-1)*n:nr*n);
+            strt = mod(1+(nr-1)*n,N);
+            stp = mod(nr*n,N);
+            if stp<strt % wrap to beginning of array
+                d1 = dat(strt:end,:);
+                d2 = dat(1:stp,:);
+                datn = cat(1,d1,d2);
+                z1 = specz(strt:end);
+                z2 = specz(1:stp);
+                zn = cat(1,z1,z2);
+            else % just get the slices
+                datn = dat(strt:stp,:);
+                zn = specz(strt:stp);
+            end
             len_zn = length(zn);
         end
 
+        % Do algor fit
         if strcmp(algor,'NN')
             ulayers = [15,15,15]; % train with len(ulayers) hidden layers, # hidden units each
             [net, photz, mse, test_photz] = do_fitnet(ulayers, datn, zn, test_dat);
@@ -90,6 +104,7 @@ for i=1:Nsampszs
     end
     %%
 
+    % Calc and store errors
     [NMAD, out10] = calc_zerrors(zdev);
     errs(i,2) = NMAD;
     errs(i,3) = out10;
