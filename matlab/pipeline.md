@@ -37,9 +37,11 @@ pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=tit
 
 <!-- fs -->
 #### NN
-<!-- <img src="plots/errorsNN.png" alt="errorsNN" width="500"/> -->
-<img src="plots/errorsNN_2x10.png" alt="errorsNN_2x10" width="400"/>
-<img src="plots/errorsNN_3x15.png" alt="errorsNN_3x15" width="400"/>
+__2x10__
+<img src="plots/errorsNN_2x10.png" alt="errorsNN_2x10" width="500"/>
+__3x10__
+<img src="plots/errorsNN_3x15.png" alt="errorsNN_3x15" width="500"/>
+<img src="plots/errorsNN.png" alt="errorsNN also 3x15" width="500"/>
 
 #### RF
 <img src="plots/errorsRF.png" alt="errorsRF" width="500"/>
@@ -122,6 +124,7 @@ Code run from predict_photoz_testGPz.m
     - <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="500"/>
 
 - [x] heteroscedastic = false;
+    - code notes say: "set to false if only interested in point estimates [default=true]"
     - 2-12% HIGHER NMAD, SIMILAR OUT10
     - <img src="plots/GPz/hskFalse.png" alt="hskFalse" width="500"/>
 
