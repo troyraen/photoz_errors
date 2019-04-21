@@ -127,13 +127,11 @@ Code run from predict_photoz_testGPz.m
     - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
     - [x] git add matlab/plots/GPz/inNoiseFalse.png
 
-- [-] more sample sizes and maxIter
+- [x] more sample sizes and maxIter
     - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
-    - [ ] cp plots/errorsGPz_mI250_iNfls.png plots/GPz/maxIter250_inNoisefalse.png
-    - [ ] git add plots/GPz/maxIter250_inNoisefalse.png
 
 
-- [ ] check that input file was written correctly
+- [x] check that input file was written correctly
 - [ ] try with ugriz only
 
 
