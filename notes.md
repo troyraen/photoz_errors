@@ -62,7 +62,7 @@ conda install -c conda-forge root
 python scripts/annz_singleReg_quick.py --make
 ```
 [helpful link for setting environment-specific variables](https://stackoverflow.com/questions/46826497/conda-set-ld-library-path-for-env-only)
-```
+
 
 <!-- fe ANNz2-->
 

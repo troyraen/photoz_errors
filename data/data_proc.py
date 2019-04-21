@@ -101,4 +101,5 @@ def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
     return None
 # dp.write_sample(cdf,basenm='colors',nsamp=30000)
 # dp.write_sample(cdf, nfiles=3, nsamp=1000000, fmt='mtxt', basenm='colors')
-# dp.write_sample(cdf, nfiles=2, nsamp=3000000, fmt='mtxt', basenm='colors')
+# dp.write_sample(cdf, nfiles=2, nsamp=3023057, fmt='mtxt', basenm='CGcolors') # get an odd number to avoid duplicating subsample sets.
+# dp.write_sample(cdf, nfiles=2, nsamp=32357, fmt='mtxt', basenm='CGsample') # get an odd number to avoid duplicating subsample sets.

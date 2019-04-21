@@ -2,8 +2,13 @@
 **/*.dat
 **/*.gz
 **/*.tar
-**/*report.log
+**.pyc
+
+final_report/*.log
 final_report/*.aux
+final_report/*.bbl
+final_report/*.blg
 final_report/*.fdb_latexmk
 final_report/*.fls
+
 /external_codes/rongpu/
