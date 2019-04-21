@@ -11,15 +11,17 @@ status = system(command);
 use data/data_proc.py to convert datasets for matlab input.
 <!-- fe -->
 
+# Final Plots:
+<!-- fs -->
 
-# All errors, 1 plot
+## All errors, 1 plot
 <!-- fs -->
 ```python
 import plot_errors as pe
 base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
-flist = ['errorsNN.mtxt', 'errorsRF.mtxt', 'errorsGPz.mtxt']
-lgnd = ['NN', 'RF', 'GPz']
-styl = ['b', 'g', 'r']
+flist = ['errorsNN_2x10.mtxt', 'errorsNN_3x15.mtxt', 'errorsRF.mtxt', 'errorsGPz.mtxt']
+lgnd = ['NN_2x10', 'NN_3x15', 'RF', 'GPz']
+styl = ['c', 'b', 'g', 'r']
 title = 'Errors in Photo_z estimates'
 fout = base_path+'errors_plots/errors.png'
 pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
@@ -31,18 +33,13 @@ pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=tit
 <!-- fe # All errors, 1 plot -->
 
 
-# DEBUGGING and TESTING NOTES
-<!-- fs -->
+## Individuals
 
-- [x] change # neural nets
-- [x] look at RF settings
-- [x] look at GPz
-
-
-## Running Final Plots
 <!-- fs -->
 #### NN
-<img src="plots/errorsNN.png" alt="errorsNN" width="500"/>
+<!-- <img src="plots/errorsNN.png" alt="errorsNN" width="500"/> -->
+<img src="plots/errorsNN_2x10.png" alt="errorsNN_2x10" width="400"/>
+<img src="plots/errorsNN_3x15.png" alt="errorsNN_3x15" width="400"/>
 
 #### RF
 <img src="plots/errorsRF.png" alt="errorsRF" width="500"/>
@@ -50,7 +47,19 @@ pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=tit
 #### GPz
 <img src="plots/errorsGPz.png" alt="errorsGPz" width="500"/>
 
-<!-- fe ## Running Final Plots -->
+<!-- fe ## Individuals  -->
+
+<!-- fe # Final Plots -->
+
+
+
+# DEBUGGING and TESTING NOTES
+<!-- fs -->
+
+- [x] change # neural nets
+- [x] look at RF settings
+- [x] look at GPz
+
 
 
 ## Save errors to color data files
@@ -97,6 +106,9 @@ All with 2x10 and 3x15
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
 
+- [x] more sample sizes and maxIter # BEST fout_tag = mI250_iNfls
+    - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
+
 - [x] Default Settings
     - <img src="plots/GPz/Defalts.png" alt="Defaults" width="500"/>
 
@@ -126,9 +138,6 @@ Code run from predict_photoz_testGPz.m
     - BETTER ALL AROUND
     - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
     - [x] git add matlab/plots/GPz/inNoiseFalse.png
-
-- [x] more sample sizes and maxIter
-    - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
 
 
 - [x] check that input file was written correctly

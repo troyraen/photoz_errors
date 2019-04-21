@@ -17,7 +17,7 @@ net.trainParam.show = 10;
 net.trainParam.max_fail= params{3}; % 1500;
 net.trainParam.min_grad=1e-10;
 
-if length(target)> 99999
+if length(target)> 99999 % these runs are taking too long
     net.trainParam.epochs = 200;
     net.trainParam.max_fail = 100;
 end

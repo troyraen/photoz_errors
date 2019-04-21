@@ -22,10 +22,10 @@ machine = 'Kor';
 epochs = 500; % started with 200, also try ~1000
 max_fail = 50; % started with 1500
 
-fout_tag = '_2x10';
-ulayers = [10,10];
-params = {ulayers, epochs, max_fail};
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', fout_tag, params, machine)
+% fout_tag = '_2x10';
+% ulayers = [10,10];
+% params = {ulayers, epochs, max_fail};
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', fout_tag, params, machine)
 
 fout_tag = '_3x15';
 ulayers = [15,15,15];
