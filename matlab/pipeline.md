@@ -11,35 +11,6 @@ status = system(command);
 use data/data_proc.py to convert datasets for matlab input.
 <!-- fe -->
 
-# Get and Plot errors data
-<!-- fs -->
-```Matlab
-plotdir = '/Users/troyraen/Korriban/Documents/photoz_errors/matlab/plots';
-datadir = '/Users/troyraen/Korriban/Documents/photoz_errors/data';
-err_files = dir(strcat(datadir,'/errors*'));
-% err_files = dir(strcat(datadir,'/errors*_ow_041919_1406.mtxt'));
-num_files = length(err_files);
-for i=1:num_files
-    % Get algorithm name and error data:
-    tmp = strsplit(err_files(i).name, '.');
-    tmp = strsplit(tmp{1}, 'errors');
-    tmp = strsplit(tmp{2}, '_');
-    if max(size(tmp))>1 % get only most current/default file
-        continue
-    end
-    algor = tmp{1}
-
-    path = strcat(err_files(i).folder, '/', err_files(i).name);
-    algor_errs = load(strcat(err_files(i).folder, '/', err_files(i).name));
-
-    % Plot
-    Nruns = 3;
-    save = strcat(plotdir,'/errors_fit_',algor,'.png') % 0; % save to file
-    plot_errors(algor_errs, algor, Nruns, save);
-end
-```
-<!-- fe Get and Plot errors data -->
-
 
 # All errors, 1 plot
 <!-- fs -->
@@ -54,14 +25,18 @@ fout = base_path+'errors_plots/errors.png'
 pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
 ```
 
+<img src="../data/errors_plots/errors.png" alt="errors.png" width="700"/>
+
+
 <!-- fe # All errors, 1 plot -->
 
 
 # DEBUGGING and TESTING NOTES
 <!-- fs -->
 
-- [ ] change # neural nets
-- [ ] look at RF settings
+- [x] change # neural nets
+- [x] look at RF settings
+- [x] look at GPz
 
 
 ## Running Final Plots
@@ -189,3 +164,41 @@ zdev = calc_zdev(test_specz, test_photz);
 
 
 <!-- fe # DEBUGGING and TESTING NOTES -->
+
+
+# Archive
+<!-- fs -->
+
+
+# Get and Plot errors data
+<!-- fs -->
+```Matlab
+plotdir = '/Users/troyraen/Korriban/Documents/photoz_errors/matlab/plots';
+datadir = '/Users/troyraen/Korriban/Documents/photoz_errors/data';
+err_files = dir(strcat(datadir,'/errors*'));
+% err_files = dir(strcat(datadir,'/errors*_ow_041919_1406.mtxt'));
+num_files = length(err_files);
+for i=1:num_files
+    % Get algorithm name and error data:
+    tmp = strsplit(err_files(i).name, '.');
+    tmp = strsplit(tmp{1}, 'errors');
+    tmp = strsplit(tmp{2}, '_');
+    if max(size(tmp))>1 % get only most current/default file
+        continue
+    end
+    algor = tmp{1}
+
+    path = strcat(err_files(i).folder, '/', err_files(i).name);
+    algor_errs = load(strcat(err_files(i).folder, '/', err_files(i).name));
+
+    % Plot
+    Nruns = 3;
+    save = strcat(plotdir,'/errors_fit_',algor,'.png') % 0; % save to file
+    plot_errors(algor_errs, algor, Nruns, save);
+end
+```
+<!-- fe Get and Plot errors data -->
+
+
+
+<!-- fe Archive -->
