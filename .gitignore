@@ -3,6 +3,7 @@
 **/*.gz
 **/*.tar
 **.pyc
+**._*
 
 final_report/*.log
 final_report/*.aux
