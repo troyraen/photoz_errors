@@ -1,32 +1,82 @@
+# Call python to use hf.file_ow
+<!-- fs -->
+fow = 'plots/errsNN.png';
+command = strcat("python -c $'import helper_fncs as hf; hf.file_ow(\'",fow,"\')'");
+status = system(command);
 
+<!-- fe # Call python to use hf.file_ow -->
 
-# Get and Plot errors data (1 file per algorithm)
+# .
+<!-- fs -->
+use data/data_proc.py to convert datasets for matlab input.
+<!-- fe -->
+
+# Get and Plot errors data
 <!-- fs -->
 ```Matlab
+plotdir = '/Users/troyraen/Korriban/Documents/photoz_errors/matlab/plots';
 datadir = '/Users/troyraen/Korriban/Documents/photoz_errors/data';
 err_files = dir(strcat(datadir,'/errors*'));
+% err_files = dir(strcat(datadir,'/errors*_ow_041919_1406.mtxt'));
 num_files = length(err_files);
 for i=1:num_files
     % Get algorithm name and error data:
     tmp = strsplit(err_files(i).name, '.');
     tmp = strsplit(tmp{1}, 'errors');
-    algor = tmp{2};
+    tmp = strsplit(tmp{2}, '_');
+    if max(size(tmp))>1 % get only most current/default file
+        continue
+    end
+    algor = tmp{1}
 
     path = strcat(err_files(i).folder, '/', err_files(i).name);
     algor_errs = load(strcat(err_files(i).folder, '/', err_files(i).name));
 
     % Plot
-    Nruns = -1; % unknown number of runs
-    save = 1; % save to file
+    Nruns = 3;
+    save = strcat(plotdir,'/errors_fit_',algor,'.png') % 0; % save to file
     plot_errors(algor_errs, algor, Nruns, save);
 end
 ```
 <!-- fe Get and Plot errors data -->
 
 
+# All errors, 1 plot
+<!-- fs -->
+```python
+import plot_errors as pe
+base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
+flist = ['errorsNN.mtxt', 'errorsRF.mtxt', 'errorsGPz.mtxt']
+lgnd = ['NN', 'RF', 'GPz']
+styl = ['b', 'g', 'r']
+title = 'Errors in Photo_z estimates'
+fout = base_path+'errors_plots/errors.png'
+pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
+```
+
+<!-- fe # All errors, 1 plot -->
+
 
 # DEBUGGING and TESTING NOTES
 <!-- fs -->
+
+- [ ] change # neural nets
+- [ ] look at RF settings
+
+
+## Running Final Plots
+<!-- fs -->
+#### NN
+<img src="plots/errorsNN.png" alt="errorsNN" width="500"/>
+
+#### RF
+<img src="plots/errorsRF.png" alt="errorsRF" width="500"/>
+
+#### GPz
+<img src="plots/errorsGPz.png" alt="errorsGPz" width="500"/>
+
+<!-- fe ## Running Final Plots -->
+
 
 ## Save errors to color data files
 <!-- fs -->
@@ -38,7 +88,37 @@ cdf = dp.calc_colors(df)
 <!-- fe ## Save errors to color data files -->
 
 
-## Trying to bring down [NMAD, out10] = 0.0424, 0.1584
+## - [x] Check RF
+<!-- fs -->
+use predict_photoz_testRF.m
+
+- [x] training cycles nlc100, nlc500, nlc1000
+    - all very similar to each other. short runtimes.
+    - all terminate normally after requested number of training cycles
+    <img src="plots/errorsRF_nlc100.png" alt="errorsRF_nlc100" width="400"/><img src="plots/errorsRF_nlc500.png" alt="errorsRF_nlc500" width="400"/><img src="plots/errorsRF_nlc1000.png" alt="errorsRF_nlc1000" width="400"/>
+
+- [x] Cross validation nlc500_CVon
+    - very similar to CVoff case. no noticeable runtime difference
+    <img src="plots/errorsRF_nlc500_CVon.png" alt="errorsRF_nlc500_CVon" width="400"/>
+
+
+<!-- fe ## Check RF -->
+
+
+
+## - [x] Check NN
+<!-- fs -->
+use predict_photoz_testNN.m
+
+All with 2x10 and 3x15
+- [x] epoch 500 max_fail 100. errorsNN_2x10_e500mf100
+    - looks good, can probably do max_fail=50 (didn't see any models that improved after that).
+    <img src="plots/errorsNN_2x10_e500mf100.png" alt="errorsNN_2x10_e500mf100" width="400"/><img src="plots/errorsNN_3x15_e500mf100.png" alt="errorsNN_3x15_e500mf100" width="400"/>
+
+<!-- fe ## Check NN -->
+
+
+## Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
 
@@ -67,21 +147,26 @@ Code run from predict_photoz_testGPz.m
     - <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="500"/>
     - [x] git add matlab/plots/GPz/SDSSdat.png
 
-- [x] inputNoise = false;
+- [x] inputNoise = false; # BETTER ALL AROUND
     - BETTER ALL AROUND
     - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
     - [x] git add matlab/plots/GPz/inNoiseFalse.png
+
+- [-] more sample sizes and maxIter
+    - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
+    - [ ] cp plots/errorsGPz_mI250_iNfls.png plots/GPz/maxIter250_inNoisefalse.png
+    - [ ] git add plots/GPz/maxIter250_inNoisefalse.png
 
 
 - [ ] check that input file was written correctly
 - [ ] try with ugriz only
 
 
-<!-- fe ## Trying to bring down [NMAD, out10] = 0.0424, 0.1584 -->
+<!-- fe ## Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584 -->
 
 
 
-## NMAD, out10 don't make sense. Resolution: Korriban local file had unknown error.
+## - [x] NMAD, out10 don't make sense. Resolution: Korriban local file had unknown error.
 <!-- fs -->
 NMAD = 1.4651; out10 = 1 for fdat = '../data/CG_GPz.mtxt';
 ```Matlab
