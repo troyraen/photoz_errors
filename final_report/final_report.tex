@@ -44,13 +44,13 @@
 
 \section{Introduction and Related Work}
 
-It is well established that the light reaching our telescopes from distant galaxies is shifted toward the red end of the spectrum (relative to the frequency it was originally emitted at, this is called a 'redshift' and is usually denoted by $z$), and that the magnitude of this shift increases with the galaxy's distance from us. The combined measurements from many galaxies indicate that the universe itself (the space between galaxies) is expanding at a rate that increases with time. The precise calculation of this expansion rate is being pursued and it depends strongly on our ability to make accurate calculations/estimations of the amount by which the light from a distant galaxy is redshifted. (Actually, the calculations of all fundamental quantities in cosmology rely heavily on understanding these redshifts.)
+  It is well established that the light reaching our telescopes from distant galaxies is shifted toward the red end of the spectrum (relative to the frequency it was originally emitted at, this is called a 'redshift' and is usually denoted by $z$), and that the magnitude of this shift increases with the galaxy's distance from us. The combined measurements from many galaxies indicate that the universe itself (the space between galaxies) is expanding at a rate that increases with time. The precise calculation of this expansion rate is being pursued and it depends strongly on our ability to make accurate calculations/estimations of the amount by which the light from a distant galaxy is redshifted. (Actually, the calculations of all fundamental quantities in cosmology rely heavily on understanding these redshifts.)
 
-The calculation of the redshift from measurements of light intensity generally depends on being able to find known features in the intensity as a function of frequency. Poor frequency resolution then increases the error on an estimation of the redshift.
+  The calculation of the redshift from measurements of light intensity generally depends on being able to find known features in the intensity as a function of frequency. Poor frequency resolution then increases the error on an estimation of the redshift.
 
-There are two ways in which telescopes can take measurements: spectroscopy and photometry. Spectroscopy records information about the amount of light coming in over a wide range of the frequency spectrum, at high resolution. Photometry essentially divides the spectrum into a small number of bins (on the order of 5) and records aggregated information for each bin. Thus photometry is much cheaper to do and so we have more data of this type. However, this low resolution translates into large errors on our estimates of redshift using this data. (A redshift calculated in this way is called a 'photo-z'.)
+  There are two ways in which telescopes can take measurements: spectroscopy and photometry. Spectroscopy records information about the amount of light coming in over a wide range of the frequency spectrum, at high resolution. Photometry essentially divides the spectrum into a small number of bins (on the order of 5) and records aggregated information for each bin. Thus photometry is much cheaper to do and so we have more data of this type. However, this low resolution translates into large errors on our estimates of redshift using this data. (A redshift calculated in this way is called a 'photo-z'.)
 
-Various machine learning algorithms have been used to estimate photozs, with neural nets and random forest regressors showing the most success.
+  Various machine learning algorithms have been used to estimate photozs, with neural nets and random forest regressors showing the most success.
 
 
   \subsection{Dataset}
@@ -93,7 +93,44 @@ Various machine learning algorithms have been used to estimate photozs, with neu
   10 runs with same sample size and pool abs(photz - specz)./(1+specz) for stats.
 
   NMAD = 1.48* median(abs(photz - specz)./(1+specz))
-  out10 = sum(abs(photz - specz)./(1+specz) > 0.1)/N
+  out10 = sum(abs(photz - specz)./(1+specz) $>$ 0.1)/N
+
+
+  % Use Matlab's nlinfit() to fit the function $a+b.*x.^c$
+  Use python's scipy.optimize.curve\_fit() to fit the function $a+b.*x.^c$
+
+
+
+  \subsection{Neural Nets}
+
+    I train multi-layer neural networks using two different architectures: 2x10 with 2 hidden layers, each with 10 units; and 3x15 with 3 hidden layers, each with 15 units. Both are motivated by approaches in \cite{pzreview} (see sections 4.1.1 DESDM and 4.1.2 ANNZ).
+
+    I use the Matlab \texttt{fitnet()} function with backpropagation optimized using the Levenberg-Marquardt method. After running a few tests I set the parameters \texttt{epochs =  500}, \texttt{max\_fail = 50}, \texttt{min\_grad = 1e-10}.
+
+
+
+
+  \subsection{Random Forest Regression}
+
+    I train random forest regression models using the Matlab \texttt{fitrensemble()} function. I did some preliminary runs with \texttt{OptimizeHyperparameters = 'auto'} and found the following "best" options:
+
+      \begin{table}[H]
+      \begin{tabular}{ll}
+        Method            & Bag \\
+        NumLearningCycles & 495 \\
+        MinLeafSize       & 1
+      \end{tabular}
+      \end{table}
+
+      Guided by these results I tested some settings and ultimately use \texttt{Method = 'Bag'} with \texttt{Learners = 'tree'}, \texttt{MaxNumSplits = Nsamples-1}, and \texttt{NumLearningCycles = BLANK}, \texttt{Crossval = BLANK}. This generates random forest models using bagged decision tree models.
+
+      EXPLAIN RF REGRESSION
+
+
+
+
+  \subsection{Gaussian Process Regression}
+
 
 
 
@@ -108,5 +145,9 @@ Various machine learning algorithms have been used to estimate photozs, with neu
 
 \section{Conclusion}
 
+
+
+\bibliographystyle{abbrv}
+\bibliography{bib.bib}
 
 \end{document}
