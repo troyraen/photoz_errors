@@ -1,20 +1,20 @@
-function [net, res, mse, test_res] = do_fitnet(ulayers, data, target, test_data)
-% ulayers = e.g. [10,12] builds network with 2 hidden layers
-%                           with 10, 12 units respectively
+function [net, res, mse, test_res] = do_fitnet(data, target, test_data, params)
 % data should be matrix (rows=examples, columns=attributes)
 % target should be 1 x Nexamples with correct answer
 % test_data is matrix of test data
+% params is cell array of parameters = {ulayers, epochs, max_fail}
 
 
+ulayers = params{1};
 %% builds a function fitting neural network
 net=fitnet(ulayers);
 
 %%% use conjugate gradient to train the model
 net.trainFcn='trainlm'; % default
 % net.trainFcn='trainscg';
-net.trainParam.epochs = 200;
+net.trainParam.epochs = params{2}; % 200;
 net.trainParam.show = 10;
-net.trainParam.max_fail=1500;
+net.trainParam.max_fail= params{3}; % 1500;
 net.trainParam.min_grad=1e-10;
 
 [net, tr] = train(net,data',target');
