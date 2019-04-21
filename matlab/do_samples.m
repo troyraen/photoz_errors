@@ -1,4 +1,4 @@
-function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
+function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, fout_tag, aparams, machine)
 % Nsampszs = number of training sample sizes to test,
 %               log spaced in [1000, length(specz)].
 % max_sampsz = max number for sample size
@@ -8,6 +8,7 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 %           'GPz'
 % aparams = {parameters for algor}. see details below
 % loads data from file, see base_path and fdat below
+% machine = 'Roy' or 'Kor'. Determines which data files are used
 
 
 %-------------------------------------------------------------
@@ -15,11 +16,22 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, aparams)
 % ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10','i10_m_z10','z10_m_y10'};
 %           !!! These must be the same as in data_proc.py !!!!
 fprintf('\nSetting up for algorithm %2s\n', algor)
-test_N = 100000; % test sample size
-fdat = 'CGcolors'; % data file prefix
-base_path = '/home/tjr63/Documents/photoz_errors/';
-ferrs = strcat(base_path,'data/errors',algor,'.mtxt'); % file name to save errors
-fplt = strcat(base_path,'matlab/plots/errors',algor,'.png'); % file name to save errors plot
+if machine == 'Kor'
+    base_path = '/home/tjr63/Documents/photoz_errors/';
+    fdat = 'CGcolors'; % data file prefix
+    test_N = 100000; % test sample size
+elseif machine == 'Roy'
+    base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/';
+    fdat = 'CGsample'; % data file prefix
+    test_N = 10000; % test sample size
+else
+    'MUST PASS machine TO do_samples'
+    return
+end
+
+
+ferrs = strcat(base_path,'data/errors',algor,fout_tag,'.mtxt'); % file name to save errors
+fplt = strcat(base_path,'matlab/plots/errors',algor,fout_tag,'.png'); % file name to save errors plot
 
 
 if ~strcmp(algor,'GPz')
@@ -38,8 +50,8 @@ else % GPz
     % aparams = [fdat, maxIter, fplt, GPz_params]
     fdat = aparams{1};
     maxIter = aparams{2};
-    fplt = aparams{3};
-    GPz_params = aparams{4}; % = {heteroscedastic, csl_method, maxAttempts}
+    % fplt = aparams{3};
+    GPz_params = aparams{3}; % = {heteroscedastic, csl_method, maxAttempts}
 
 end
 %%
@@ -84,11 +96,10 @@ for i=1:Nsampszs
 
         % Do algor fit
         if strcmp(algor,'NN')
-            ulayers = [15,15,15]; % train with len(ulayers) hidden layers, # hidden units each
-            [net, photz, mse, test_photz] = do_fitnet(ulayers, datn, zn, test_dat);
+            [net, photz, mse, test_photz] = do_fitnet(datn, zn, test_dat, aparams);
 
         elseif strcmp(algor,'RF')
-            [mdl, photz, mse, test_photz] = do_fitrensemble(datn, zn, test_dat);
+            [mdl, photz, mse, test_photz] = do_fitrensemble(datn, zn, test_dat, aparams);
 
         elseif strcmp(algor,'GPz')
             Nexamples = [n, n, test_N]; % [training,validation,testing]
@@ -116,6 +127,6 @@ end
 %% Save errors and plots
 command = strcat("python -c $'import helper_fncs as hf; hf.file_ow(\'",ferrs,"\')'");
 status = system(command);
-save(ferrs, 'errs', '-ascii');
+save(ferrs, 'errs', '-ascii');%, '-append');
 plot_errors(errs, algor, Nruns, fplt);
 %%
