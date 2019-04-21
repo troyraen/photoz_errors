@@ -105,7 +105,7 @@
 
     I train multi-layer neural networks using two different architectures: 2x10 with 2 hidden layers, each with 10 units; and 3x15 with 3 hidden layers, each with 15 units. Both are motivated by approaches in \cite{pzreview} (see sections 4.1.1 DESDM and 4.1.2 ANNZ).
 
-    I use the Matlab \texttt{fitnet()} function with backpropagation optimized using the Levenberg-Marquardt method. After running a few tests I set the parameters \texttt{epochs =  500}, \texttt{max\_fail = 50}, \texttt{min\_grad = 1e-10}.
+    I use the Matlab \texttt{fitnet()} function with backpropagation optimized using the Levenberg-Marquardt method. After running a few tests I set the parameters \texttt{epochs = 500}, \texttt{max\_fail = 50}, \texttt{min\_grad = 1e-10}. Due to runtime constraints, I set \texttt{epochs = 200}, \texttt{max\_fail = 100} for all training runs with Nsamples $>$ 99999.
 
 
 
@@ -131,6 +131,17 @@
 
   \subsection{Gaussian Process Regression}
 
+    Gaussian Processes (GPs)
+
+    non-parametric, probabilistic model that assumes output is predicted by some function of the input plus Gaussian noise. Uses kernel basis functions phi (specifically, the radial basis function) to model the density around a given data point. Does Bayseian analysis with likelihood = p(y|w) = ~N(mean=phi*w, sigma propto uncertainty due to density of training points in the region (=> uncertainty in mean prediction) + noise or error in the nearby input datapoints (heteroscedastic incorporated here)), prior = ?. Gives a posterior conditional , from which I take the point estimate.
+
+    heteroscedastic noise => errors in datapoints are correlated, in other words noise is variable and input-dependent
+
+    In \cite{sgp} they assert that using the sum of squares as the minimization objective function biases the metric
+
+    TRY VARYING m, THE NUMBER OF BASIS FUNCTIONS \cite{sgp} pg 4, but plot 5 shows delta z does not vary much with training size for a given number of basis fncs => this could improve the predictions but should not change shape of scaling with N? Could bring down out10?
+
+    \includegraphics[width=1.\textwidth]{../plots/figure_true_redshift_histogram.png}
 
 
 
@@ -144,7 +155,7 @@
 
 
 \section{Conclusion}
-
+In \cite{gpz} they use principal component analysis to further pre-process the features, speeds up optimization.
 
 
 \bibliographystyle{abbrv}
