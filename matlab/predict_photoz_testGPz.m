@@ -52,12 +52,13 @@ inputNoise = true;
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
 %                 {heteroscedastic, csl_method, 200} })
 %
+% %%
+% fplt = 'plots/GPz/SDSSdat.png'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {'../GPz/data/sdss_sample.csv', maxIter, fplt, ...
+%                 {heteroscedastic, csl_method, maxAttempts, inputNoise} })
+%
+% fplt = 'plots/GPz/inNoiseFalse.png'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
+%                 {heteroscedastic, csl_method, maxAttempts, false} })
+%
 % fe completed
-
-fplt = 'plots/GPz/SDSSdat.png'
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {'../GPz/data/sdss_sample.csv', maxIter, fplt, ...
-                {heteroscedastic, csl_method, maxAttempts, inputNoise} })
-
-fplt = 'plots/GPz/inNoiseFalse.png'
-[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
-                {heteroscedastic, csl_method, maxAttempts, false} })
