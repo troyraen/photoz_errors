@@ -1,8 +1,19 @@
 # Questions
 ---
+
+- [ ] Results
+- [ ] GPz settings
+- [ ] future work
+
+NN 'poslin' is RELU function. try changing this.
+try traingdx (or traingdm) for trainFnc option. seems most like what's used in modern literature
+
+trainNetwork is more modern than fitnet. it's in the deep learning toolbox. has 'adam' optimizer which is more modern
+
 - [ ] initialize GPz with constant random seed?
 
-
+4:41 run 17 starts. 4:43 run 20 finishes. next sample size is 1.9e4
+5:02 doing run 2 of 31623x500
 
 # To Do:
 
