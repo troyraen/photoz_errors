@@ -12,8 +12,12 @@ trainNetwork is more modern than fitnet. it's in the deep learning toolbox. has 
 
 - [ ] initialize GPz with constant random seed?
 
+RF:
 4:41 run 17 starts. 4:43 run 20 finishes. next sample size is 1.9e4
 5:02 doing run 2 of 31623x500
+8:26 doing run 12 of 138950x500
+9:57 doing run 5 of 227585x500
+11:27 doing run 14 of 227585x500
 
 # To Do:
 

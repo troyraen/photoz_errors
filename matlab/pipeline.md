@@ -68,19 +68,13 @@ __3x10__
 
 
 
-## Save errors to color data files
-<!-- fs -->
-```python
-import data_proc as dp
-df = dp.load_from_file(which='all')
-cdf = dp.calc_colors(df)
-```
-<!-- fe ## Save errors to color data files -->
+
 
 
 ## - [x] Check RF
 <!-- fs -->
 use predict_photoz_testRF.m
+
 
 - [x] training cycles nlc100, nlc500, nlc1000
     - all very similar to each other. short runtimes.
@@ -100,7 +94,16 @@ use predict_photoz_testRF.m
 <!-- fs -->
 use predict_photoz_testNN.m
 
-All with 2x10 and 3x15
+- [ ] 3x50: # fout_tag = '3x50_e200mf50'
+    -
+    <img src="plots/errorsNN_3x50_e200mf50.png" alt="errorsNN_3x50_e200mf50" width="500"/>
+
+- [ ] 3x15, poslin (RELU) transfer fnc # fout_tag = 3x15_e200mf50_transFposlin
+    -
+    <img src="plots/errorsNN_3x15_e200mf50_transFposlin.png" alt="3x15_e200mf50_transFposlin" width="500"/>
+
+
+All with 2x10 and 3x15:
 - [x] epoch 500 max_fail 100. errorsNN_2x10_e500mf100
     - looks good, can probably do max_fail=50 (didn't see any models that improved after that).
     <img src="plots/errorsNN_2x10_e500mf100.png" alt="errorsNN_2x10_e500mf100" width="400"/><img src="plots/errorsNN_3x15_e500mf100.png" alt="errorsNN_3x15_e500mf100" width="400"/>
@@ -111,6 +114,15 @@ All with 2x10 and 3x15
 ## Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
+
+- [ ] csl 'balanced' (higher weight to rare samples) # fout_tag = 'mIt150_cslBalanced'
+    -
+    <img src="plots/errorsGPz_mIt150_cslBalanced" alt="errorsGPz_mIt150_cslBalanced" width="500"/>
+
+- [ ] combine 1/(1+spec z) weighting with heteroscedastic=False (recommended for point estimates) # fout_tag = 'mIt150_cslNormalized_hetFalse'
+    -
+    <img src="plots/errorsGPz_mIt150_cslNormalized_hetFalse" alt="errorsGPz_mIt150_cslNormalized_hetFalse" width="500"/>
+
 
 - [x] CURRENT BEST: more sample sizes and maxIter250, inNoisefalse # fout_tag = mI250_iNfls
     - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
@@ -214,6 +226,18 @@ zdev = calc_zdev(test_specz, test_photz);
 
 
 <!-- fe ## NMAD, out10 don't make sense -->
+
+
+
+## Save errors to color data files
+<!-- fs -->
+```python
+import data_proc as dp
+df = dp.load_from_file(which='all')
+cdf = dp.calc_colors(df)
+```
+<!-- fe ## Save errors to color data files -->
+
 
 
 <!-- fe Archive -->
