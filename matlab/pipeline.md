@@ -95,12 +95,12 @@ use predict_photoz_testRF.m
 use predict_photoz_testNN.m
 
 - [ ] 3x50: # fout_tag = '3x50_e200mf50'
-    -
-    <img src="plots/errorsNN_3x50_e200mf50.png" alt="errorsNN_3x50_e200mf50" width="500"/>
+    - run next
+    <!-- <img src="plots/errorsNN_3x50_e200mf50.png" alt="errorsNN_3x50_e200mf50" width="500"/> -->
 
 - [ ] 3x15, poslin (RELU) transfer fnc # fout_tag = 3x15_e200mf50_transFposlin
-    -
-    <img src="plots/errorsNN_3x15_e200mf50_transFposlin.png" alt="3x15_e200mf50_transFposlin" width="500"/>
+    - run next
+    <!-- <img src="plots/errorsNN_3x15_e200mf50_transFposlin.png" alt="3x15_e200mf50_transFposlin" width="500"/> -->
 
 
 All with 2x10 and 3x15:
@@ -111,17 +111,17 @@ All with 2x10 and 3x15:
 <!-- fe ## Check NN -->
 
 
-## - [ ] Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
+## Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
 
 - [ ] csl 'balanced' (higher weight to rare samples) # fout_tag = 'mIt150_cslBalanced'
-    -
-    <img src="plots/errorsGPz_mIt150_cslBalanced" alt="errorsGPz_mIt150_cslBalanced" width="500"/>
+    - run next
+    <!-- <img src="plots/errorsGPz_mIt150_cslBalanced" alt="errorsGPz_mIt150_cslBalanced" width="500"/> -->
 
 - [ ] combine 1/(1+spec z) weighting with heteroscedastic=False (recommended for point estimates) # fout_tag = 'mIt150_cslNormalized_hetFalse'
-    -
-    <img src="plots/errorsGPz_mIt150_cslNormalized_hetFalse" alt="errorsGPz_mIt150_cslNormalized_hetFalse" width="500"/>
+    - run next
+    <!-- <img src="plots/errorsGPz_mIt150_cslNormalized_hetFalse" alt="errorsGPz_mIt150_cslNormalized_hetFalse" width="500"/> -->
 
 
 - [x] CURRENT BEST: more sample sizes and maxIter250, inNoisefalse # fout_tag = mI250_iNfls
