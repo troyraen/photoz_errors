@@ -2,7 +2,7 @@ function [net, res, mse, test_res] = do_fitnet(data, target, test_data, params)
 % data should be matrix (rows=examples, columns=attributes)
 % target should be 1 x Nexamples with correct answer
 % test_data is matrix of test data
-% params is cell array of parameters = {ulayers, epochs, max_fail}
+% params is cell array of parameters = {ulayers, epochs, max_fail, transferFcn}
 
 
 ulayers = params{1};
@@ -17,10 +17,14 @@ net.trainParam.show = 10;
 net.trainParam.max_fail= params{3}; % 1500;
 net.trainParam.min_grad=1e-10;
 
-if length(target)> 99999 % these runs are taking too long
-    net.trainParam.epochs = 200;
-    net.trainParam.max_fail = 100;
+for i=1:length(ulayers)
+    net.layers{i}.transferFcn = params{4}
 end
+
+% if length(target)> 99999 % these runs are taking too long
+%     net.trainParam.epochs = 200;
+%     net.trainParam.max_fail = 100;
+% end
 
 [net, tr] = train(net,data',target');
 % view(net)
