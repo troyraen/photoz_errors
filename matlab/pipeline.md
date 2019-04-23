@@ -134,7 +134,7 @@ Code run from predict_photoz_testGPz.m
     - A BIT BETTER AS TRAINING SIZE INCREASES
     <img src="plots/GPz/maxItr500.png" alt="maxItr500" width="500"/>
 
-- [x] csl_method = 'normalized';
+- [x] csl_method = 'normalized'; (1/(1+spec z) weighting)
     - SIMILAR NMAD, 7% HIGHER OUT10 WITH HIGHER VARIANCE btwn sample sizes
     <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="500"/>
 
@@ -151,8 +151,9 @@ Code run from predict_photoz_testGPz.m
     - BETTER ALL AROUND. not sure why, should investigate
     <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="500"/>
 
-- [x] inputNoise = false; use input errors as features # BETTER ALL AROUND
-    - BETTER ALL AROUND
+- [x] inputNoise = false; use input errors as features
+    - BETTER ALL AROUND.
+    - shouldn't use this. still unsure where errors come from
     <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
 
 
