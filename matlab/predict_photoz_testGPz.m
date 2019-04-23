@@ -10,35 +10,70 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 %%%%% MAKE SURE THESE MATCH WHAT WAS WRITTEN USING data_proc.py %%%%%
 
 
-Nsampszs = 5;
-max_sampsz = 30000;
-Nruns = 3;
-
-%%% Neural Nets
-% 'DOING NEURAL NETS'
-% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', [])
-
-%%% Random Forest
-% 'DOING RANDOM FOREST'
-% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF', [])
+Nsampszs = 6;
+max_sampsz = 316228;
+Nruns = 5;
+machine = 'Kor'
 
 %%% GPz
 'DOING GPz'
+% params = {heteroscedastic, csl_method, maxAttempts, inputNoise};
 % fdat = '../GPz/data/sdss_sample.csv'
-fdat = '../data/CG_GPz.mtxt'
-maxIter = 50
+fdat = '../data/CG_GPz.mtxt';
+maxIter = 150;
 
 % defaults:
 heteroscedastic = true;
 csl_method = 'normal';
 maxAttempts = 50;
 inputNoise = true;
+
+
+
+fout_tag = '_mIt150_cslBalanced';
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
+                {heteroscedastic, 'balanced', maxAttempts, inputNoise}, machine })
+
+%
+% fout_tag = '_mIt150_cslNormalized';
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
+%                 {heteroscedastic, 'normalized', maxAttempts, inputNoise}, machine })
+
+
+fout_tag = '_mIt150_cslNormalized_hetFalse';
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
+                {false, 'normalized', maxAttempts, inputNoise}, machine })
+
+
+% fs completed
+%
+% Nsampszs = 5;
+% max_sampsz = 30000;
+% Nruns = 3;
+%
+%%% Neural Nets
+% 'DOING NEURAL NETS'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', [])
+%
+%%% Random Forest
+% 'DOING RANDOM FOREST'
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'RF', [])
+%
+% %%% GPz
+% 'DOING GPz'
+% % fdat = '../GPz/data/sdss_sample.csv'
+% fdat = '../data/CG_GPz.mtxt'
+% maxIter = 50
+%
+% % defaults:
+% heteroscedastic = true;
+% csl_method = 'normal';
+% maxAttempts = 50;
+% inputNoise = true;
 % fplt = 'plots/GPz/Defalts.png'
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...
 %                 {heteroscedastic, csl_method, maxAttempts, inputNoise} })
 
-% specific runs
-% fs completed
 %
 % fplt = 'plots/GPz/hskFalse.png'
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', {fdat, maxIter, fplt, ...

@@ -10,26 +10,59 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 %%%%% MAKE SURE THESE MATCH WHAT WAS WRITTEN USING data_proc.py %%%%%
 
 
-Nsampszs = 5;
-max_sampsz = 30000;
-Nruns = 3;
-machine = 'Roy'
+
+Nsampszs = 6;
+max_sampsz = 316228;
+Nruns = 5;
+machine = 'Kor'
 
 
 %%% Neural Nets
 'DOING NEURAL NETS'
-% params = {ulayers, epochs, max_fail}
-epochs = 500; % started with 200, also try ~1000
-max_fail = 100; % started with 1500
+% params = {ulayers, epochs, max_fail, transferFcn}
+epochs = 200; % started with 200, also try ~1000
+max_fail = 50; % started with 1500
+transferFcn = 'tansig';
 
 
-fout_tag = '_2x10_e500mf100';
-ulayers = [10,10];
-params = {ulayers, epochs, max_fail};
+fout_tag = '_3x50_e200mf50';
+ulayers = [50,50,50];
+params = {ulayers, epochs, max_fail, transferFcn};
 [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', fout_tag, params, machine)
 
 
-fout_tag = '_3x15_e500mf100';
+fout_tag = '_3x15_e200mf50_transFposlin';
 ulayers = [15,15,15];
-params = {ulayers, epochs, max_fail};
+params = {ulayers, epochs, max_fail, 'poslin'};
 [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', fout_tag, params, machine)
+
+
+
+% fs completed
+%
+% Nsampszs = 5;
+% max_sampsz = 30000;
+% Nruns = 3;
+% machine = 'Roy'
+%
+%
+% %%% Neural Nets
+% 'DOING NEURAL NETS'
+% % params = {ulayers, epochs, max_fail}
+% epochs = 500; % started with 200, also try ~1000
+% max_fail = 100; % started with 1500
+%
+%
+% fout_tag = '_2x10_e500mf100';
+% ulayers = [10,10];
+% params = {ulayers, epochs, max_fail};
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', fout_tag, params, machine)
+%
+%
+% fout_tag = '_3x15_e500mf100';
+% ulayers = [15,15,15];
+% params = {ulayers, epochs, max_fail};
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'NN', fout_tag, params, machine)
+%
+%
+% fe completed
