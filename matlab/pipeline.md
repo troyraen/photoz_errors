@@ -90,7 +90,7 @@ use predict_photoz_testRF.m
 
 
 
-## - [x] Check NN
+## - [ ] Check NN
 <!-- fs -->
 use predict_photoz_testNN.m
 
@@ -111,7 +111,7 @@ All with 2x10 and 3x15:
 <!-- fe ## Check NN -->
 
 
-## Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
+## - [ ] Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
 
