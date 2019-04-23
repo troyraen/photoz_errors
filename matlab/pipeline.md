@@ -125,38 +125,35 @@ Code run from predict_photoz_testGPz.m
 
 
 - [x] CURRENT BEST: more sample sizes and maxIter250, inNoisefalse # fout_tag = mI250_iNfls
-    - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
+    <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
 
 - [x] Default Settings
-    - <img src="plots/GPz/Defalts.png" alt="Defaults" width="500"/>
+    <img src="plots/GPz/Defalts.png" alt="Defaults" width="500"/>
 
 - [x] maxIter = 500;
     - A BIT BETTER AS TRAINING SIZE INCREASES
-    - <img src="plots/GPz/maxItr500.png" alt="maxItr500" width="500"/>
-    - [x] git add matlab/plots/GPz/maxItr500.png
+    <img src="plots/GPz/maxItr500.png" alt="maxItr500" width="500"/>
 
 - [x] csl_method = 'normalized';
     - SIMILAR NMAD, 7% HIGHER OUT10 WITH HIGHER VARIANCE btwn sample sizes
-    - <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="500"/>
+    <img src="plots/GPz/cslNormalized.png" alt="cslNormalized" width="500"/>
 
 - [x] heteroscedastic = false;
     - code notes say: "set to false if only interested in point estimates [default=true]"
     - 2-12% HIGHER NMAD, SIMILAR OUT10
-    - <img src="plots/GPz/hskFalse.png" alt="hskFalse" width="500"/>
+    <img src="plots/GPz/hskFalse.png" alt="hskFalse" width="500"/>
 
 - [x] maxAttempts = 200;
     - NO DIFFERENCE
-    - <img src="plots/GPz/maxatt200.png" alt="maxatt200" width="500"/>
+    <img src="plots/GPz/maxatt200.png" alt="maxatt200" width="500"/>
 
-- [x] fdat = '../GPz/data/sdss_sample.csv';
-    - BETTER ALL AROUND
-    - <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="500"/>
-    - [x] git add matlab/plots/GPz/SDSSdat.png
+- [x] try pre-packaged data. fdat = '../GPz/data/sdss_sample.csv';
+    - BETTER ALL AROUND. not sure why, should investigate
+    <img src="plots/GPz/SDSSdat.png" alt="SDSSdat" width="500"/>
 
-- [x] inputNoise = false; # BETTER ALL AROUND
+- [x] inputNoise = false; use input errors as features # BETTER ALL AROUND
     - BETTER ALL AROUND
-    - <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
-    - [x] git add matlab/plots/GPz/inNoiseFalse.png
+    <img src="plots/GPz/inNoiseFalse.png" alt="inNoiseFalse" width="500"/>
 
 
 - [x] check that input file was written correctly
