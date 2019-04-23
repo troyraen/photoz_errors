@@ -16,18 +16,21 @@ use data/data_proc.py to convert datasets for matlab input.
 
 ## All errors, 1 plot
 <!-- fs -->
+cd data
 ```python
 import plot_errors as pe
+import helper_fncs as hf
 base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
 flist = ['errorsNN_2x10.mtxt', 'errorsNN_3x15.mtxt', 'errorsRF.mtxt', 'errorsGPz.mtxt']
 lgnd = ['NN_2x10', 'NN_3x15', 'RF', 'GPz']
 styl = ['c', 'b', 'g', 'r']
 title = 'Errors in Photo_z estimates'
 fout = base_path+'errors_plots/errors.png'
+fout_ow = hf.file_ow(fout)
 pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
 ```
 
-<img src="../data/errors_plots/errors.png" alt="errors.png" width="700"/>
+<img src="../data/errors_plots/errors.png" alt="errors.png" width="900"/>
 
 
 <!-- fe # All errors, 1 plot -->
@@ -39,6 +42,7 @@ pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=tit
 #### NN
 __2x10__
 <img src="plots/errorsNN_2x10.png" alt="errorsNN_2x10" width="500"/>
+
 __3x10__
 <img src="plots/errorsNN_3x15.png" alt="errorsNN_3x15" width="500"/>
 <img src="plots/errorsNN.png" alt="errorsNN also 3x15" width="500"/>
@@ -108,7 +112,7 @@ All with 2x10 and 3x15
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
 
-- [x] more sample sizes and maxIter # BEST fout_tag = mI250_iNfls
+- [x] CURRENT BEST: more sample sizes and maxIter250, inNoisefalse # fout_tag = mI250_iNfls
     - <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
 
 - [x] Default Settings
@@ -151,27 +155,6 @@ Code run from predict_photoz_testGPz.m
 
 
 
-## - [x] NMAD, out10 don't make sense. Resolution: Korriban local file had unknown error.
-<!-- fs -->
-NMAD = 1.4651; out10 = 1 for fdat = '../data/CG_GPz.mtxt';
-```Matlab
-% fdat = '../GPz/data/sdss_sample.csv';
-fdat = '../data/CG_GPz.mtxt';
-Nexamples = [100000, 100000, test_N];
-maxIter = 50;
-[other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
-other % = [out10, diff_frout10] = 0.0260   -0.0000; 0.1584   -0.0000
-zdev = calc_zdev(test_specz, test_photz);
-[NMAD, out10] = calc_zerrors(zdev) % = 1.4653, 1; = 0.0231, 0.0260; 0.0424, 0.1584
-
-```
-- [ ] try with ugriz only
-- [ ] try letting it set sample fractions
-
-
-<!-- fe ## NMAD, out10 don't make sense -->
-
-
 
 <!-- fe # DEBUGGING and TESTING NOTES -->
 
@@ -209,6 +192,28 @@ end
 ```
 <!-- fe Get and Plot errors data -->
 
+
+
+
+## - [x] NMAD, out10 don't make sense. Resolution: Korriban local file had unknown error.
+<!-- fs -->
+NMAD = 1.4651; out10 = 1 for fdat = '../data/CG_GPz.mtxt';
+```Matlab
+% fdat = '../GPz/data/sdss_sample.csv';
+fdat = '../data/CG_GPz.mtxt';
+Nexamples = [100000, 100000, test_N];
+maxIter = 50;
+[other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples);
+other % = [out10, diff_frout10] = 0.0260   -0.0000; 0.1584   -0.0000
+zdev = calc_zdev(test_specz, test_photz);
+[NMAD, out10] = calc_zerrors(zdev) % = 1.4653, 1; = 0.0231, 0.0260; 0.0424, 0.1584
+
+```
+- [ ] try with ugriz only
+- [ ] try letting it set sample fractions
+
+
+<!-- fe ## NMAD, out10 don't make sense -->
 
 
 <!-- fe Archive -->
