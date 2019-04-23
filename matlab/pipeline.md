@@ -128,7 +128,7 @@ Code run from predict_photoz_testGPz.m
     <img src="plots/GPz/maxIter250_inNoisefalse.png" alt="maxIter250_inNoisefalse" width="500"/>
 
 - [x] Default Settings
-    <img src="plots/GPz/Defalts.png" alt="Defaults" width="500"/>
+    - <img src="plots/GPz/Defalts.png" alt="Defaults" width="500"/>
 
 - [x] maxIter = 500;
     - A BIT BETTER AS TRAINING SIZE INCREASES
