@@ -97,6 +97,7 @@ plt.show(block=False)
 
 
 # Scaling relation plot
+<!-- fs -->
 ```python
 import numpy as np
 
@@ -105,6 +106,7 @@ plt.figure()
 plt.plot(N, N)
 
 ```
+<!-- fe # Scaling relation plot -->
 
 
 
@@ -134,9 +136,24 @@ pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=tit
 
 
 ## Individuals
-
 <!-- fs -->
+
 #### NN
+__all__
+```python
+import plot_errors as pe
+import helper_fncs as hf
+base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
+flist = ['errorsNN_2x10.mtxt', 'errorsNN_3x15.mtxt', 'errorsNN_3x50_e200mf50.mtxt', 'errorsGPz__3x15_e200mf50_transFposlin.mtxt']
+lgnd = ['NN_2x10', 'NN_3x15', 'NN_3x50', 'NN_RELU']
+styl = ['c', 'dodgerblue', 'b', 'darkblue']
+title = 'NN: Errors in Photo_z estimates'
+fout = base_path+'errors_plots/errors_NN.png'
+fout_ow = hf.file_ow(fout)
+pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
+```
+<img src="../data/errors_plots/errors_NN.png" alt="errors_NN" width="500"/>
+
 __2x10__
 <img src="plots/errorsNN_2x10.png" alt="errorsNN_2x10" width="500"/>
 
@@ -148,6 +165,21 @@ __3x10__
 <img src="plots/errorsRF.png" alt="errorsRF" width="500"/>
 
 #### GPz
+```python
+import plot_errors as pe
+import helper_fncs as hf
+base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
+flist = ['errorsGPz_mIt250_Defaults.mtxt', 'errorsGPz_mIt250_cslBalanced.mtxt', 'errorsGPz_mIt250_methodVC.mtxt', 'errorsGPz_mIt250_0errs.mtxt', 'errorsGPz.mtxt']
+lgnd = ['Defaults', "'balanced' errors", 'variable covariance', 'input errors = 0', 'Main run']
+styl = ['c', 'g', 'b', 'purple', '0.75']
+title = 'GPz: Errors in Photo_z estimates'
+fout = base_path+'errors_plots/errors_GPz.png'
+fout_ow = hf.file_ow(fout)
+pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
+```
+<img src="../data/errors_plots/errors_GPz.png" alt="errors_GPz" width="500"/>
+
+
 <img src="plots/errorsGPz.png" alt="errorsGPz" width="500"/>
 
 <!-- fe ## Individuals  -->
@@ -213,6 +245,8 @@ All with 2x10 and 3x15:
 ## Check GPz: Trying to bring down [NMAD, out10] = 0.0424, 0.1584
 <!-- fs -->
 Code run from predict_photoz_testGPz.m
+
+Saw some models 'Terminated by minFunc' in several different tests. Not sure what this means exactly.
 
 - [ ] csl 'balanced' (higher weight to rare samples) # fout_tag = 'mIt150_cslBalanced'
     - run next

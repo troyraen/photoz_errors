@@ -78,6 +78,8 @@ def write_sample_GPz(fout='CG_GPz.mtxt'):
 
     return None
 # dp.write_sample_GPz()
+# fout='CG_GPz_Roy.mtxt' is a subsample with 100000 rows.
+# fout='CG_GPz_0errs.mtxt' has all errors set to 0.
 
 def write_sample(df, nfiles=5, nsamp=20000, fmt='mtxt', basenm='CGsample'):
 	# store a smaller sample

@@ -27,6 +27,11 @@ RF:
 predict 24 hours for last sample size!?
 5:58 doing run 1 of sample size 1000000
 10:45 doing run 5 of 1000000x500
+7:38 doing run 13 of 1000000x500
+9:31 doing run 15 of 1000000x500
+11:49 doing run 17 of 1000000x500
+12:31 doing run 18 of 1000000x500
+3:45 done.
 
 NN:
 9:10 started predict_photoz_testNN
@@ -38,6 +43,17 @@ NN:
 predict 12 hours for last sample size
 5:57 doing run 1, N=316228
 10:45 doing run 2, N=316228
+7:37 doing run 4, N=316228
+9:31 doing run 5, N=316228
+11:50 doing run 5, N=316228
+2:00 done.
+
+
+GPz
+started 9:50, mIt250_cslBalanced
+done 10:37
+
+10:39 start mIt250_methodVC
 
 # To Do:
 

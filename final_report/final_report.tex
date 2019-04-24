@@ -44,7 +44,7 @@
 
 \newcommand{\figscale}[4]{
 % commands: width scale, path, caption, label
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \caption{#3}
     \label{#4}
@@ -79,7 +79,7 @@
 
     I use the dataset \texttt{Catalog\_Graham+2018\_10YearPhot} (see \cite{graham}) which consists of simulated telescope data: measurements of light in 6 frequency ranges (bins), plus errors on the measurements, for $3.8 \times 10^6$ galaxies. The dataset includes the true redshift for each galaxy, so this is a supervised, regression problem.
 
-    Figure \ref{fig:zdist} shows the true redshift distribution of the galaxies in the dataset. Projections along principal components is shown in the table below. Figure \ref{fig:corrplot} shows pairwise scatter plots of the features and the target along with correlation coefficients. I chose the two features with the highest absolute value correlations with the target redshift and show their scatter plot, colored by redshift, in Figure \ref{fig:topfeatures} to get a sense of the distribution.
+    Figure \ref{fig:zdist} shows the true redshift distribution of the galaxies in the dataset. Projections along principal components that minimize the covariance in the data is shown in the table below. Figure \ref{fig:corrplot} shows pairwise scatter plots of the features and the target along with correlation coefficients. I chose the two features with the highest absolute value correlations with the target redshift and show their scatter plot, colored by redshift, in Figure \ref{fig:topfeatures} to get a sense of the distribution.
 
     % fs figures and tables
     \figscale{0.6}{../plots/figure_true_redshift_histogram.png}{Histogram of true redshifts in the dataset, reproduced from \cite{graham}. True redshifts become more difficult to obtain as the redshift increases. Algorithms may have a more difficult time making accurate predictions at higher z because of the sparsity of training data.}{fig:zdist}
@@ -127,7 +127,7 @@
 
     \figscale{1}{../data/corrplot.png}{Pair-wise scatter plots with histograms along the diagonal. Correlation coefficients are printed on each plot.}{fig:corrplot}
 
-    \figscale{1}{../data/top2features_coloredby_z.png}{Scatter plot of features with highest absolute value correlations with the redshift, colored by true redshift. Galaxies at low z tend to cluster near $u-g=0$. At high z there is a much larger scatter in $u-g$ but the $r-i$ values tend to be lower. This is a random sample of 10000 galaxies to avoid saturating the plot. I verified that the plot looks qualitatively similar for different random samples.}{fig:topfeatures}
+    \figscale{1}{../data/top2features_coloredby_z.png}{Scatter plot of the two features with highest absolute value correlations with the redshift, colored by true redshift. Galaxies at low z tend to cluster near $u-g=0$. At high z there is a much larger scatter in $u-g$ but the $r-i$ values tend to be lower. This is a random sample of 10000 galaxies to avoid saturating the plot. I verified that the plot looks qualitatively similar for different random samples.}{fig:topfeatures}
 
     % fe figures and tables
 
@@ -149,9 +149,14 @@
 
 \section{Methodology and Results}
 
-  I follow \cite{newman} in evaluating the accuracy of photo-z estimates as a function of sample size. Various machine learning algorithms have been used to estimate photo-z's, with neural nets (NN) and random forest regressors (RF) showing the most success. See, for example, \cite{pzreview}, \cite{annz2}, and \cite{tpz}.
+  I follow \cite{newman} in evaluating the accuracy of photo-z estimates as a function of sample size. Various machine learning algorithms have been used to estimate photo-z's, with neural nets (NN) and random forest regressors (RF) showing the most success. See, for example, \cite{pzreview}, \cite{annz2}, and \cite{tpz}. I evaluate and compare the performance of four ML algorithms: 1) Neural Net composed of 2 hidden layers with 10 units each (NN\_2x10); 2) Neural Net composed of 3 hidden layers with 15 units each (NN\_3x15); 3) Random Forest regressor (RF) composed of bagged decision trees; and 4) GPz which is a publicly available code based on Gaussian Processes and developed specifically for photo-z's. See section \ref{sec:algors} for details.
 
-  My final results (Figure \ref{fig:errs}) are in the form of curve fits to two statistics (detailed below) calculated on the algorithm predictions. Specifically I fit (for each statistic) the parameters \{a,b,c\} in the function
+  \figscale{1}{../data/errors_plots/errors.png}{Errors in photo-z estimates as a function of training set size for selected ML algorithms. Figure \ref{fig:newman} shows the results of \cite{newman} for comparison.}{fig:errs}
+
+  \figscale{1}{../proposal/photozerrors.png}{Reproduced from Newman et al., 2019 (\cite{newman})}{fig:newman}
+
+
+  My main results (Figure \ref{fig:errs}) are in the form of curve fits to two statistics (detailed below) calculated on the algorithm predictions. Specifically I fit (for each statistic) the parameters \{a,b,c\} in the function
   \equin{a+b \times N^c},
   % Use Matlab's nlinfit() to fit the function $a+b.*x.^c$
   (where N is the training sample size) using the Python function \texttt{scipy.optimize.curve\_fit()}. We are primarily interested in the value of the exponent, c.
@@ -174,23 +179,26 @@
 
 
   \subsection{Algorithms}
-
-    I evaluate and compare the performance of four ML algorithms: 1) Neural Net composed of 2 hidden layers with 10 units each (NN\_2x10); 2) Neural Net composed of 3 hidden layers with 15 units each (NN\_3x15); 3) Random Forest regressor (RF) composed of bagged decision trees; and 4) GPz which is a publicly available code based on Gaussian Processes and developed specifically for photo-z's.
-
+  \label{sec:algors}
 
     \subsubsection{Neural Nets}
+    \label{sec:NN}
 
       I train multi-layer neural networks using two different architectures: 2x10 with 2 hidden layers, each with 10 units; and 3x15 with 3 hidden layers, each with 15 units. Both are motivated by approaches in \cite{pzreview} (see sections 4.1.1 DESDM and 4.1.2 ANNZ).
 
       I use the Matlab \texttt{fitnet()} function with backpropagation optimized using the Levenberg-Marquardt method. After running a few tests I set the parameters \texttt{epochs=500}, \texttt{max\_fail=50}, \texttt{min\_grad=1e-10} and use the \texttt{tanh} transfer function.
 
-      In addition, I did two smaller tests, each with 6 sample sizes and 5 runs per sample size. Results are in figure ???.
+      In addition, I did two smaller tests, each with 6 sample sizes and 5 runs per sample size:
 
       \begin{enumerate}
         \item The predictions improve with the more complex network (3x15), so I ran a smaller test using 3 hidden layers with 50 units to see if the trend continued.
 
         \item RELU (\texttt{'poslin'} in Matlab) is a much more common transfer function in  photo-z algorithms, so I tested this as well.
       \end{enumerate}
+
+      All NN results are shown in Figure SHOW PLOT %\ref{fig:errorsNN}
+      %
+      % \figscale{1}{../data/errors_plots/errors_NN.png}{Results of smaller tests (main results shown for comparison). See section \ref{sec:NN} for details.}{fig:errorsNN}
 
 
     \subsubsection{Random Forest Regression}
@@ -206,6 +214,8 @@
         \end{table}
 
         Guided by these results I tested some settings and ultimately use \texttt{Method='Bag'} with \texttt{Learners='tree'}, \texttt{MaxNumSplits=Nsamples-1}, and \texttt{NumLearningCycles=500}, \texttt{Crossval='off'}. This generates a random forest model using 500 weak learner decision trees, each trained on a subset of data of size N generated via bootstrap resampling.
+
+        RF regressors predict a target value for each leaf by minimizing a loss function.
 
         EXPLAIN RF REGRESSION
 
@@ -244,20 +254,13 @@
 
 
 
-\section{Results and Discussion}
+\section{Conclusions and Future Work}
 
-  The main results of this work are shown together in Figure \ref{fig:errs} for convenience, however GPz uses more features (measurement errors), so its overall level of accuracy should not be compared directly to the NN or RF models. Figure \ref{fig:newman} shows the results of \cite{newman} for comparison.
-
-  \figscale{1}{../data/errors_plots/errors.png}{Errors in photo-z estimates as a function of training set size for selected ML algorithms.}{fig:errs}
-
-  \figscale{1}{../proposal/photozerrors.png}{Reproduced from Newman et al., 2019 (\cite{newman})}{fig:newman}
 
   Overall, the NN models I tested perform the worst and
 
   This feature is also noted in \cite{gpz} (small improvement after $\sim 10^4$).
 
-
-\section{Conclusion and Future Work}
 
   For a more fair comparison between GPz and the other models, more effort should be devoted to handling the measurement error features more carefully. They could be added to the feature set for NN and RF, and/or they could be artificially set to zero in the GPz feature set.
 
