@@ -7,7 +7,7 @@ function [other, test_specz, mse, test_photz] = do_fitGPz(dataPath, maxIter, Nex
 %   Required format is specified below.
 % maxIter = int. maximum number of iterations.
 % Nexamples = vector of ints. # examples in datasets: [training,validation,testing].
-% params = cell array. {heteroscedastic, csl_method, maxAttempts, inputNoise}
+% params = cell array. {heteroscedastic, csl_method, maxAttempts, inputNoise, method}
 %
 % Example usage:
 %   % from matlab dir
@@ -25,7 +25,7 @@ rng(1); % fix random seed
 
 m = 100;                                % number of basis functions to use [required]
 
-method = 'VD';                          % select a method, options = GL, VL, GD, VD, GC and VC [required]
+method = params{5}; % 'VD';                          % select a method, options = GL, VL, GD, VD, GC and VC [required]
 
 
 heteroscedastic = params{1}; % true;                 % learn a heteroscedastic noise process, set to false if only interested in point estimates [default=true]
