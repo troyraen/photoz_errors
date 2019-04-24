@@ -18,6 +18,26 @@ RF:
 8:26 doing run 12 of 138950x500
 9:57 doing run 5 of 227585x500
 11:27 doing run 14 of 227585x500
+7:16 doing run 4 of 610540x500
+8:56 doing run 8 of 610540x500
+10:40 doing run 11 of 610540x500
+12:33 doing run 13 of 610540x500
+2:44 doing run 17 of 610540x500
+4:42 doing run 20 of 610540x500
+predict 24 hours for last sample size!?
+5:58 doing run 1 of sample size 1000000
+10:45 doing run 5 of 1000000x500
+
+NN:
+9:10 started predict_photoz_testNN
+9:48 doing run 2 , N=10000
+10:40 doing run 2, N=31623
+12:33 doing run 1, N=100000
+2:44 doing run 3, N=100000
+4:40 doing run 5, N=100000
+predict 12 hours for last sample size
+5:57 doing run 1, N=316228
+10:45 doing run 2, N=316228
 
 # To Do:
 

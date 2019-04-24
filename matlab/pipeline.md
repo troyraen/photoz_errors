@@ -11,6 +11,103 @@ status = system(command);
 use data/data_proc.py to convert datasets for matlab input.
 <!-- fe -->
 
+# PCA analysis and Correlations plot
+<!-- fs -->
+[pca()](https://www.mathworks.com/help/stats/pca.html)
+> returns the principal component coefficients
+> Each column of coeff contains coefficients for one principal component, and the columns are in descending order of component variance
+> By default, pca centers the data and uses the singular value decomposition (SVD) algorithm.
+> note: % In \cite{gpz} they use principal component analysis to further pre-process the features, speeds up optimization.
+
+[corrplot()](https://www.mathworks.com/help/econ/corrplot.html)
+> creates a matrix of plots showing correlations among pairs of variables in X. Histograms of the variables appear along the matrix diagonal; scatter plots of variable pairs appear in the off diagonal. The slopes of the least-squares reference lines in the scatter plots are equal to the displayed correlation coefficients.
+
+```Matlab
+base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/';
+fdat = 'CGcolors1.mtxt'; Nexamples = 780953
+dat = load(strcat(base_path,fdat));
+
+coeff = pca(dat(:,3:end)) =
+    0.7977   -0.5534   -0.2285   -0.0726   -0.0042   -0.0020
+    0.5969    0.7661    0.1783    0.1568    0.0207    0.0004
+    0.0852   -0.1745    0.8555   -0.4118   -0.2461   -0.0169
+    0.0101   -0.2212    0.3991    0.4946    0.7049    0.2239
+   -0.0066   -0.1591    0.1573    0.6848   -0.4525   -0.5255
+   -0.0037   -0.0468    0.0088    0.2948   -0.4872    0.8206
+addpath('../../matlab_functions')
+ttl = 'PCA vectors';
+col_lbls = {'pc1', 'pc2', 'pc3', 'pc4', 'pc5', 'pc6'};
+row_lbls = {'u','u-g','g-r','r-i','i-z','z-y'};
+writelatextable(ttl,col_lbls,row_lbls,coeff,4)
+
+% test on larger dataset
+fdat0 = 'CGcolors0.mtxt'; Nexamples = 3023057
+dat0 = load(strcat(base_path,fdat0));
+coeff0 = pca(dat0(:,3:end)) =
+   0.7984   -0.5525   -0.2279   -0.0729   -0.0042   -0.0016
+   0.5958    0.7670    0.1771    0.1580    0.0210   -0.0002
+   0.0858   -0.1724    0.8553   -0.4130   -0.2462   -0.0175
+   0.0103   -0.2214    0.4001    0.4943    0.7032    0.2278
+  -0.0066   -0.1601    0.1582    0.6836   -0.4495   -0.5291
+  -0.0036   -0.0466    0.0089    0.2959   -0.4923    0.8172
+% results similar to fdat => using smaller dataset for following calculations
+
+% CORRELATIONS
+colnames = {'z','u','u-g','g-r','r-i','i-z','z-y'};
+[R,PValue,H] = corrplot(dat(:,2:end), 'varNames',colnames);
+gcf.PaperUnits = 'inches';
+gcf.PaperPosition = [0 0 8 8];
+
+% saved as base_path/corrplot.png
+```
+<img src="../data/corrplot.png" alt="corrplot" width="600"/>
+
+<!-- fe # PCA analysis and Correlations plot -->
+
+
+# Scatter plot, most relevant features
+<!-- fs -->
+```python
+import data_proc as dp
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+df = dp.load_from_file(which='all')
+cdf = dp.calc_colors(df.sample(100000))
+cdf0 = cdf.sample(10000)
+
+plt.figure()
+plt.scatter(cdf0.r10_m_i10, cdf0.u10_m_g10, c=cdf0.redshift, alpha=0.25)
+plt.xlabel('r-i')
+plt.ylabel('u-g')
+plt.colorbar(label='Redshift (z)')
+plt.show(block=False)
+
+plt.figure()
+plt.scatter(cdf0.u10, cdf0.r10_m_i10, c=cdf0.redshift, alpha=0.25)
+plt.xlabel('u magnitude')
+plt.ylabel('r-i')
+plt.colorbar(label='Redshift (z)')
+plt.show(block=False)
+```
+<img src="../data/top2features_coloredby_z.png" alt="top2features_coloredby_z.png" width="500"/>
+
+<!-- fe # Scatter plot, most relevant features -->
+
+
+# Scaling relation plot
+```python
+import numpy as np
+
+N = np.logspace(3,6,1000)
+plt.figure()
+plt.plot(N, N)
+
+```
+
+
+
 # Final Plots:
 <!-- fs -->
 
@@ -75,6 +172,8 @@ __3x10__
 <!-- fs -->
 use predict_photoz_testRF.m
 
+[NumLearningCycles](https://www.mathworks.com/help/stats/fitrensemble.html#bvdwj92)
+> At every learning cycle, the software trains one weak learner for every template object in Learners. Consequently, the software trains NumLearningCycles*numel(Learners) learners.
 
 - [x] training cycles nlc100, nlc500, nlc1000
     - all very similar to each other. short runtimes.

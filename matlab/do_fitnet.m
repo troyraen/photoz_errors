@@ -18,7 +18,7 @@ net.trainParam.max_fail= params{3}; % 1500;
 net.trainParam.min_grad=1e-10;
 
 for i=1:length(ulayers)
-    net.layers{i}.transferFcn = params{4}
+    net.layers{i}.transferFcn = params{4};
 end
 
 % if length(target)> 99999 % these runs are taking too long

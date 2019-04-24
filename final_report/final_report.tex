@@ -51,85 +51,113 @@
     \includegraphics[width=#1\textwidth]{#2}
 \end{figure}
 }
+
+
 %%--------------------------------------------------------------------
 %%% BEGIN DOCUMENT
 \begin{document}
-
-\maketitle
-%\tableofcontents
-
 % fe document setup
 
 
 \begin{abstract}
-  In this work I study how the errors in photoz estimates scale with the size of the training set for various machine learning algorithms. A 'photoz' is an estimate of the redshift of a particular object (usually a star or a galaxy) that uses photometric data.
+  In this work I study how the errors in photoz estimates scale with the size of the training set for various machine learning algorithms. A 'photoz' is an estimate of the redshift of a particular object (usually a star or a galaxy) that uses photometric data. In this work I study how the errors in photo-z estimates scale with the size of the training set for two neural net architectures, a random forest algorithm, and a publicly available code developed specifically for photo-z's called GPz \cite{gpz}. My code is available at \url{https://github.com/troyraen/photoz_errors}.
 \end{abstract}
 
 
-\section{Introduction and Related Work}
-
-  It is well established that the light reaching our telescopes from distant galaxies is shifted toward the red end of the spectrum (relative to the frequency it was originally emitted at), and that the magnitude of this 'redshift' (denoted by $z$) increases with the galaxy's distance from us (e.g. see \cite{newman}, \cite{graham}, \cite{pzreview}). The combined measurements from many galaxies indicate that the universe itself, the space between galaxies, is expanding at a rate that increases with time. The precise calculation of this expansion rate is being pursued and it depends strongly on our ability to make accurate calculations/estimations of the amount by which the light from a distant galaxy is redshifted. (Actually, the calculations of all fundamental quantities in cosmology rely heavily on our ability to accurately calculate these redshifts.)
-
-  The calculation of the redshift from measurements of light intensity generally depends on being able to find known features in the intensity as a function of frequency. Poor frequency resolution then increases the error in the redshift.
-
-  There are two ways in which telescopes can take measurements: spectroscopy and photometry. Spectroscopy records information about the amount of light coming in over a wide range of the frequency spectrum, at high resolution. Therefore, a redshift calculated from spectroscopic measurements is very precise and can be taken as the true redshift (sometimes called a 'spec-z'). Photometry essentially divides the spectrum into a small number of bins (on the order of 5) and records only aggregated information for each bin. Thus photometry is much cheaper to do and so we have more data of this type. However, this low resolution translates into large errors on our estimates of redshift using this data. A redshift calculated in this way is called a 'photo-z'.
-
-  Various machine learning algorithms have been used to estimate photo-z's, with neural nets and random forest regressors showing the most success (see, for example, \cite{annz2}, \cite{tpz}, and \cite{pzreview}). \textbf{In this work, I study how the errors in photo-z estimates scale with the size of the training set for selected ML algorithms.}
+\maketitle
+%\tableofcontents
 
 
+
+\section{Introduction}
+
+  It is well established that the light reaching our telescopes from distant galaxies is shifted toward the red end of the spectrum (relative to the frequency it was originally emitted at), and that the magnitude of this 'redshift' (denoted by $z$) increases with the galaxy's distance from us (e.g. see \cite{newman}, \cite{graham}, \cite{pzreview}). The combined measurements from many galaxies indicate that the universe itself, the space between galaxies, is expanding at a rate that increases with time. More precise calculations of this expansion rate, and several other quantities fundamental to cosmology, is being pursued, and they all depend strongly on our ability to make accurate redshift calculations for large numbers of galaxies.
+
+  The dataset used in this work is simulated and intended to mimic the data anticipated from the upcoming Large Synoptic Survey Telescope (LSST). LSST will collect data from large volumes of the sky and at rates several orders of magnitude above any other telescope to date. The community is making large efforts towards dealing with data at this scale, and one of these efforts is toward quick and accurate redshift calculations.
 
   \subsection{Dataset}
 
-    I use the dataset \texttt{Catalog\_Graham+2018\_10YearPhot} (\cite{graham}) which consists of simulated telescope data (measurements in 6 photometric bins, plus errors on the measurements) for $\sim3 \times 10^6$ galaxies. The dataset includes the true redshift for each galaxy, so this is a supervised, regression problem.
+    I use the dataset \texttt{Catalog\_Graham+2018\_10YearPhot} (see \cite{graham}) which consists of simulated telescope data: measurements of light in 6 frequency ranges (bins), plus errors on the measurements, for $3.8 \times 10^6$ galaxies. The dataset includes the true redshift for each galaxy, so this is a supervised, regression problem.
 
-    The simulated data is intended to mimic the data anticipated from the upcoming Large Synoptic Survey Telescope (LSST). LSST will collect data from large volumes of the sky and at rates several orders of magnitude above any other telescope to date. The community is making large efforts towards dealing with data at this scale, and one of these efforts is toward quick and accurate photo-z calculations.
+    Figure \ref{fig:zdist} shows the true redshift distribution of the galaxies in the dataset. Projections along principal components is shown in the table below. Figure \ref{fig:corrplot} shows pairwise scatter plots of the features and the target along with correlation coefficients. I chose the two features with the highest absolute value correlations with the target redshift and show their scatter plot, colored by redshift, in Figure \ref{fig:topfeatures} to get a sense of the distribution.
 
-    \figscale{0.5}{../plots/figure_true_redshift_histogram.png}{Histogram of true redshifts in the dataset. True redshifts become more difficult to obtain as the redshift increases. Algorithms may have a more difficult time making accurate predictions at higher z because of the sparsity of training data.}{fig:zdist}
+    % fs figures and tables
+    \figscale{0.6}{../plots/figure_true_redshift_histogram.png}{Histogram of true redshifts in the dataset, reproduced from \cite{graham}. True redshifts become more difficult to obtain as the redshift increases. Algorithms may have a more difficult time making accurate predictions at higher z because of the sparsity of training data.}{fig:zdist}
 
-    \subsubsection{Features:}
-
-      Previous algorithms have had more success using a set of transformed features commonly called 'colors'. This transformation is motivated by physics, and is done by subtracting the measurements in adjacent bins. We ensure that no information is lost in this transformation by including the raw measurement from one bin (it doesn't matter which one). So the final feature set includes 5 colors and 1 raw measurement for a total of 6 features.
-
-      We could transform the measurement errors, via error propagation, and include them as features. The simplest way to do this is to assume the errors are uncorrelated and add them in quadrature for each color. Indeed, this is what is done in \cite{graham}. However, because of the physics at play and the way in which the measurements are taken, the errors are expected to be correlated. I have not taken the time to explore this further, but it could be pursued in future work. (Note that the GPz code requires the inclusion of errors in the feature set, see section \ref{gpz} for details).
-
+    % fs raw data
+        % \begin{center}
+        % \begin{tabular}{|l|c|}
+        %   \multicolumn{2}{c}{} \\ \hline
+        %    & Correlations with Redshift \\ \hline
+        %   redshift & 1.0 \\ \hline
+        %   tu & \textbf{0.4551} \\ \hline
+        %   tg & 0.1438 \\ \hline
+        %   tr & 0.2717 \\ \hline
+        %   ti & 0.3933 \\ \hline
+        %   tz & 0.4234 \\ \hline
+        %   ty & 0.4136 \\ \hline
+        %   u10 & 0.3932 \\ \hline
+        %   uerr10 & \textbf{0.518} \\ \hline
+        %   g10 & 0.1435 \\ \hline
+        %   gerr10 & 0.06651 \\ \hline
+        %   r10 & 0.2716 \\ \hline
+        %   rerr10 & 0.1222 \\ \hline
+        %   i10 & 0.3931 \\ \hline
+        %   ierr10 & 0.3822 \\ \hline
+        %   z10 & 0.423 \\ \hline
+        %   zerr10 & \textbf{0.4605} \\ \hline
+        %   y10 & 0.4109 \\ \hline
+        %   yerr10 & 0.45 \\ \hline
+        % \end{tabular}
+        % \end{center}
+    % fe raw data
 
     \begin{center}
-    \begin{tabular}{|l|c|}
-      \multicolumn{2}{c}{} \\ \hline
-       & Correlations with Redshift \\ \hline
-      redshift & 1.0 \\ \hline
-      tu & \textbf{0.4551} \\ \hline
-      tg & 0.1438 \\ \hline
-      tr & 0.2717 \\ \hline
-      ti & 0.3933 \\ \hline
-      tz & 0.4234 \\ \hline
-      ty & 0.4136 \\ \hline
-      u10 & 0.3932 \\ \hline
-      uerr10 & \textbf{0.518} \\ \hline
-      g10 & 0.1435 \\ \hline
-      gerr10 & 0.06651 \\ \hline
-      r10 & 0.2716 \\ \hline
-      rerr10 & 0.1222 \\ \hline
-      i10 & 0.3931 \\ \hline
-      ierr10 & 0.3822 \\ \hline
-      z10 & 0.423 \\ \hline
-      zerr10 & \textbf{0.4605} \\ \hline
-      y10 & 0.4109 \\ \hline
-      yerr10 & 0.45 \\ \hline
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+      \multicolumn{7}{c}{PCA vectors} \\ \hline
+      & pc1 & pc2 & pc3 & pc4 & pc5 & pc6 \\ \hline
+      u &  0.7977 & -0.5534 & -0.2285 & -0.0726 & -0.004188 & -0.001952 \\ \hline
+      u-g &  0.5969 & 0.7661 & 0.1783 & 0.1568 & 0.02073 & 0.0004168 \\ \hline
+      g-r &  0.08518 & -0.1745 & 0.8555 & -0.4118 & -0.2461 & -0.01691 \\ \hline
+      r-i &  0.01012 & -0.2212 & 0.3991 & 0.4946 & 0.7049 & 0.2239 \\ \hline
+      i-z &  -0.006634 & -0.1591 & 0.1573 & 0.6848 & -0.4525 & -0.5255 \\ \hline
+      z-y &  -0.003662 & -0.04681 & 0.00884 & 0.2948 & -0.4872 & 0.8206 \\ \hline
     \end{tabular}
     \end{center}
 
+    \figscale{1}{../data/corrplot.png}{Pair-wise scatter plots with histograms along the diagonal. Correlation coefficients are printed on each plot.}{fig:corrplot}
 
-\section{Methodology}
+    \figscale{1}{../data/top2features_coloredby_z.png}{Scatter plot of features with highest absolute value correlations with the redshift, colored by true redshift. Galaxies at low z tend to cluster near $u-g=0$. At high z there is a much larger scatter in $u-g$ but the $r-i$ values tend to be lower. This is a random sample of 10000 galaxies to avoid saturating the plot. I verified that the plot looks qualitatively similar for different random samples.}{fig:topfeatures}
 
-  I follow \cite{newman} in evaluating the performance of ML algorithms as a function of sample size. My final results are in the form of curve fits to two statistics (detailed below) calculated on the algorithm predictions. Specifically I fit (using the Python function \texttt{scipy.optimize.curve\_fit()}) the parameters \{a,b,c\} in the function
+    % fe figures and tables
+
+
+    \subsubsection{Features:}
+
+      Previous algorithms have had more success using a set of transformed features commonly called 'colors'. This transformation is motivated by physics, and is done by subtracting the measurements in adjacent bins, pairwise, bringing the 6 measurements down to 5 features. By including the original measurement from one bin (it doesn't matter which one, unless it carries an unusually large error), no information is lost in the transformation. So the final feature set includes 5 colors and 1 raw measurement for a total of 6 features.
+
+      We could also transform the measurement errors and include them as features. The simplest way to do this is to assume the errors are uncorrelated and add them in quadrature. Indeed, this is what is done in \cite{graham}. However, with one exception (see \ref{gpz}), I leave them out of the final dataset for two reasons. First, I'm not sure how the errors were calculated (this is simulated data), and it is possible that the information used to calculate the true redshift was also used to calculate these errors in a way that provides the algorithm with access to the true information, even in the test set. Second, there are multiple factors that could cause the errors to be correlated, so adding them in quadrature is not necessarily the best thing to do, especially since I don't know where they came from to begin with. A more thorough analysis of the errors in the dataset is an avenue for future work.
+
+    \subsubsection{True Redshift (spec-z)}
+
+      The calculation of the redshift from measurements of light generally depends on being able to find known features in the intensity as a function of frequency and measure how far they have been shifted along the spectrum. As a result, poor frequency resolution propagates to increased error in the redshift. This becomes important when we consider the two ways in which telescopes can take measurements: spectroscopy and photometry.
+
+      Spectroscopy records information about the amount of light coming in over a wide range of the frequency spectrum, at high resolution. Therefore, a redshift calculated from spectroscopic measurements is very precise and can be taken as the true redshift (sometimes called a 'spec-z').
+
+      Photometry essentially divides the spectrum into a small number of bins (usually on the order of 5) and records only aggregated information for each bin. Thus photometry is much cheaper to do and so we have (and LSST will be able to get) much more data of this type. This data can be collected quickly for large numbers of galaxies and used by ML algorithms to estimate the redshift (called a 'photo-z'). However, the low resolution necessarily leads to less accurate predictions. This provides further motivation to study how the errors scale with sample size for various algorithms.
+
+
+\section{Methodology and Results}
+
+  I follow \cite{newman} in evaluating the accuracy of photo-z estimates as a function of sample size. Various machine learning algorithms have been used to estimate photo-z's, with neural nets (NN) and random forest regressors (RF) showing the most success. See, for example, \cite{pzreview}, \cite{annz2}, and \cite{tpz}.
+
+  My final results (Figure \ref{fig:errs}) are in the form of curve fits to two statistics (detailed below) calculated on the algorithm predictions. Specifically I fit (for each statistic) the parameters \{a,b,c\} in the function
   \equin{a+b \times N^c},
   % Use Matlab's nlinfit() to fit the function $a+b.*x.^c$
-  where N is the training sample size. We are primarily interested in the value of the exponent, c. I show the results of \cite{newman} in figure \ref{fig:newman} for comparison with my results.
-
+  (where N is the training sample size) using the Python function \texttt{scipy.optimize.curve\_fit()}. We are primarily interested in the value of the exponent, c.
   The traditional metric for evaluating photo-z estimates is the scaled difference
 
-  \nequ{\Delta z = \frac{photo_z-spec_z}{1+spec_z}.}{equ:deltaz}
+  \nequ{\Delta z \equiv \frac{photo_z-true_z}{1+true_z}.}{equ:deltaz}
 
   I evaluate the following two statistics on the metric:
 
@@ -139,7 +167,9 @@
 
   NMAD is the normalized, median absolute deviation and OUT10 is the fraction of predictions for which \equin{|\Delta z| > 10\%}. OUT10 is an important statistic because photo-z algorithms are prone to catastrophic errors in the predictions, due to both the physics involved and the inherently low resolution of photometry.
 
-  Because I aim to evaluate and compare the performance of different algorithms (rather than any specific instance of a trained model), I train 20 models (see \ref{gpz} for exception) for each algorithm and training sample size (N) and pool the results before calculating the statistics.
+  For the NN and RF cases I use the same test set of $10^5$ randomly selected galaxies (separated from the training sets prior to training) for the predictions. The GPz code handles the train/validate/test dataset splits internally, but I set Ntest = $10^5$ to maintain some consistency.
+
+  Because I aim to evaluate and compare the performance of different algorithms (rather than any specific instance of a trained model), I train 20 models for each algorithm and training sample size (N) and pool the results before calculating the statistics.
 
 
 
@@ -152,9 +182,15 @@
 
       I train multi-layer neural networks using two different architectures: 2x10 with 2 hidden layers, each with 10 units; and 3x15 with 3 hidden layers, each with 15 units. Both are motivated by approaches in \cite{pzreview} (see sections 4.1.1 DESDM and 4.1.2 ANNZ).
 
-      I use the Matlab \texttt{fitnet()} function with backpropagation optimized using the Levenberg-Marquardt method. After running a few tests I set the parameters \texttt{epochs=500}, \texttt{max\_fail=50}, \texttt{min\_grad=1e-10}.
-      % Due to runtime constraints, I set \texttt{epochs = 200}, \texttt{max\_fail = 100} for all training runs with Nsamples $>$ 99999.
+      I use the Matlab \texttt{fitnet()} function with backpropagation optimized using the Levenberg-Marquardt method. After running a few tests I set the parameters \texttt{epochs=500}, \texttt{max\_fail=50}, \texttt{min\_grad=1e-10} and use the \texttt{tanh} transfer function.
 
+      In addition, I did two smaller tests, each with 6 sample sizes and 5 runs per sample size. Results are in figure ???.
+
+      \begin{enumerate}
+        \item The predictions improve with the more complex network (3x15), so I ran a smaller test using 3 hidden layers with 50 units to see if the trend continued.
+
+        \item RELU (\texttt{'poslin'} in Matlab) is a much more common transfer function in  photo-z algorithms, so I tested this as well.
+      \end{enumerate}
 
 
     \subsubsection{Random Forest Regression}
@@ -169,10 +205,9 @@
         \end{tabular}
         \end{table}
 
-        Guided by these results I tested some settings and ultimately use \texttt{Method='Bag'} with \texttt{Learners='tree'}, \texttt{MaxNumSplits=Nsamples-1}, and \texttt{NumLearningCycles = BLANK}, \texttt{Crossval = BLANK}. This generates a random forest model using BLANK decision trees, each trained on a subset of data of size N generated via bootstrap resampling.
+        Guided by these results I tested some settings and ultimately use \texttt{Method='Bag'} with \texttt{Learners='tree'}, \texttt{MaxNumSplits=Nsamples-1}, and \texttt{NumLearningCycles=500}, \texttt{Crossval='off'}. This generates a random forest model using 500 weak learner decision trees, each trained on a subset of data of size N generated via bootstrap resampling.
 
         EXPLAIN RF REGRESSION
-
 
 
 
@@ -190,56 +225,55 @@
 
       \nequ{p(f|y,\bX) = \frac{p(y|f) p(f|\bX)}{p(y|\bX)}}{equ:cond}
 
-      The prior, \equin{p(f|\bX)}, is modeled non-parametrically using kernels that model the density around each input point. GPz uses radial basis functions for these kernels. Standard GP models are computationally expensive since there is a kernel for each datapoint and the solution requires us to invert an NxN covariance matrix associated with the kernels. GPz dramatically reduces the complexity by using sparse kernels and maintains performance by optimizing hyperparameters (governing the shape and length scale) that are unique to each kernel rather than standard, global hyperparameters. This allows kernels to specialize on different regions of parameter space, and this flexibility is cited as a key reason for the success of GPz (see \cite{sgp} for a detailed derivation).
+      The prior, \equin{p(f|\bX)}, is modeled non-parametrically (except for hyperparameters) using kernels that model the density around each input point. GPz uses radial basis functions for these kernels. Standard GP models are computationally expensive since there is a kernel for each datapoint and the solution requires us to invert an NxN covariance matrix associated with the kernels. GPz dramatically reduces the complexity by using sparse kernels and maintains performance by optimizing hyperparameters (governing the shape and length scale) that are unique to each kernel rather than standard, global hyperparameters. This allows kernels to specialize on different regions of parameter space, and this flexibility is cited as a key reason for the success of GPz (see \cite{sgp} for a detailed derivation).
 
-      GPz also has a large component that is focused on modeling the input noise and estimating the variance in the prediction due to two factors, the input noise and uncertainty due to the density of training points in a particular region. 'True' redshifts are more difficult to obtain at higher redshifts, and so the training data is not uniformly sampled (see Figure \ref{fig:zdist}) However, I only use the point estimate of (\ref{equ:cond}) in this work, so I will not describe the error calculations.
+      GPz also has a large component that is focused on estimating the variance in the prediction due to two factors, the input noise and uncertainty due to the density of training points in a particular region. 'True' redshifts are more difficult to obtain at higher redshifts, and so the training data is not uniformly sampled (see Figure \ref{fig:zdist}) I only use the point estimate of (\ref{equ:cond}) in this work, so I will not describe the error calculations. However, this means that GPz requires the use of the measurement errors, so these models use more information than the NN or RF cases.
 
-      GPz performs regression to optimize the hyperparameters, and in this process it explicitly minimizes the absolute value of the metric itself
-      (\equin{| \Delta z |})
-      rather than something more common like the mean squared error.
+      GPz performs the feature transformation internally, so the inputs to this algorithm are the raw measurements, including the errors. Additionally, it minimizes
+      \equin{| \Delta z |} directly rather than the more standard mean squared error.
 
-       % performs Bayesian analysis of L(y|w) = . It uses a sparse kernel method . Sparsity is obtained by assigning to each kernel unique hyperparameters governing its shape separate, rather than the global hyperparameters of standard kernel methods. This allows it to use a much smaller number of kernels while retaining predictive power.
+      % Notes
+      % While the use of measurement errors is required, GPz does offer two options for their use. One is to use them as input noise to model the variance on the prediction, the other is to simply use them as features.
+      % performs Bayesian analysis of L(y|w) = . It uses a sparse kernel method . Sparsity is obtained by assigning to each kernel unique hyperparameters governing its shape separate, rather than the global hyperparameters of standard kernel methods. This allows it to use a much smaller number of kernels while retaining predictive power.
+     % non-parametric, probabilistic model that assumes output is predicted by some function of the input plus Gaussian noise. Uses kernel basis functions phi (specifically, the radial basis function) to model the density around a given data point. Does Bayseian analysis with likelihood = p(y|w) = ~N(mean=phi*w, sigma propto uncertainty due to density of training points in the region (=> uncertainty in mean prediction) + noise or error in the nearby input datapoints (heteroscedastic incorporated here)), prior = ?. Gives a posterior conditional , from which I take the point estimate.
+     % heteroscedastic noise => errors in datapoints are correlated, in other words noise is variable and input-dependent
+     % In \cite{sgp} they assert that using the sum of squares as the minimization objective function biases the metric
 
-      % non-parametric, probabilistic model that assumes output is predicted by some function of the input plus Gaussian noise. Uses kernel basis functions phi (specifically, the radial basis function) to model the density around a given data point. Does Bayseian analysis with likelihood = p(y|w) = ~N(mean=phi*w, sigma propto uncertainty due to density of training points in the region (=> uncertainty in mean prediction) + noise or error in the nearby input datapoints (heteroscedastic incorporated here)), prior = ?. Gives a posterior conditional , from which I take the point estimate.
-
-      % heteroscedastic noise => errors in datapoints are correlated, in other words noise is variable and input-dependent
-
-      % In \cite{sgp} they assert that using the sum of squares as the minimization objective function biases the metric
-
-      % \includegraphics[width=0.5\textwidth]{../plots/figure_true_redshift_histogram.png}
+      I ran several small tests (SHOW PLOT) with different GPz settings and found two that improved the predictions and used them in my final runs (Figure \ref{fig:errs}): increasing the maximum number of iterations, and using the errors as features (rather than including them in the prediction uncertainty). I chose to use the errors as features since the use of the errors is required one way or the other. I intended to do a more fair comparison with the NN and RF models by following the method used in \cite{graham} to add the error features to those datasets, but time constraints prevented this. In retrospect it would have been a better choice to use the errors in the opposite way for the GPz final runs.
 
 
 
-\section{Experimental Results}
 
-  The results of this work are shown in Figure \ref{fig:errs}. Figure \ref{fig:newman} shows the results of \cite{newman} for comparison.
+\section{Results and Discussion}
+
+  The main results of this work are shown together in Figure \ref{fig:errs} for convenience, however GPz uses more features (measurement errors), so its overall level of accuracy should not be compared directly to the NN or RF models. Figure \ref{fig:newman} shows the results of \cite{newman} for comparison.
 
   \figscale{1}{../data/errors_plots/errors.png}{Errors in photo-z estimates as a function of training set size for selected ML algorithms.}{fig:errs}
 
   \figscale{1}{../proposal/photozerrors.png}{Reproduced from Newman et al., 2019 (\cite{newman})}{fig:newman}
 
+  Overall, the NN models I tested perform the worst and
 
-
-
-\section{Analysis of Results and Discussion}
-
-  Requires the use of the measurement errors, so these models use more information than the NN or RF cases. GPz performs the feature transformation internally, so the feature inputs to this algorithm are the raw measurements, including the errors.
-
-  TRY VARYING m, THE NUMBER OF BASIS FUNCTIONS \cite{sgp} pg 4, but plot 5 shows delta z does not vary much with training size for a given number of basis fncs => this could improve the predictions but should not change shape of scaling with N? Could bring down out10?
-
-
+  This feature is also noted in \cite{gpz} (small improvement after $\sim 10^4$).
 
 
 \section{Conclusion and Future Work}
-  In \cite{gpz} they use principal component analysis to further pre-process the features, speeds up optimization.
+
+  For a more fair comparison between GPz and the other models, more effort should be devoted to handling the measurement error features more carefully. They could be added to the feature set for NN and RF, and/or they could be artificially set to zero in the GPz feature set.
+
+
+        TRY VARYING m, THE NUMBER OF BASIS FUNCTIONS \cite{sgp} pg 4, but plot 5 shows delta z does not vary much with training size for a given number of basis fncs => this could improve the predictions but should not change shape of scaling with N? Could bring down out10?
+
 
 
   \subsection{Future Work}
 
-    \begin{itemize}
-      \item There is a lot of room here to tune the algorithms more finely and to test other algorithms (e.g. ANNz2, TPz). I spent several days trying to get ANNz2 running, but was unable to get it to install properly.
+    Understand errors included in the dataset. Possibly use them as features.
 
-      \item There is also the question of why GPz performs better on the pre-packaged dataset than on the dataset I used here. Much could be explored in terms of the differences between the datasets themselves and the models learned from them.
+    \begin{itemize}
+      \item There is a lot of room here to tune the algorithms for a closer comparison with existing literature and to test other algorithms written specifically for photo-z (e.g. ANNz2 \cite{annz2}, TPz \cite{tpz}). Initially I was going to test ANNz2, and I spent several days trying to get it to install properly before abandoning it in favor of GPz.
+
+      % \item There is also the question of why GPz performs better on the pre-packaged dataset than on the dataset I used here. Much could be explored in terms of the differences between the datasets themselves and the models learned from them.
 
       \item Experiment with the number of basis functions used by GPz. Find a small number (of order 5) of basis functions that still produces good predictions (must quantify 'good'). Compare these fitted kernel density estimates, and where they lie in parameter space, with two things:
         \begin{enumerate}
