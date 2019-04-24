@@ -10,10 +10,11 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 %%%%% MAKE SURE THESE MATCH WHAT WAS WRITTEN USING data_proc.py %%%%%
 
 
-Nsampszs = 5;
-max_sampsz = 30000;
+Nsampszs = 2;
+max_sampsz = 200000;
+# start at 70000; AND APPEND
 Nruns = 2;
-machine = 'Roy';
+machine = 'Kor';
 
 %%% GPz
 'DOING GPz'
@@ -24,8 +25,8 @@ machine = 'Roy';
 %                 params}, machine )
 %
 % fdat = '../GPz/data/sdss_sample.csv'
-base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/';
-fdat = strcat(base_path, 'data/CG_GPz_Roy.mtxt');
+% base_path = '/home/tjr63/Documents/photoz_errors/';
+fdat = '../data/CG_GPz.mtxt');
 maxIter = 250; % default 200
 
 % defaults:
@@ -36,20 +37,40 @@ inputNoise = true;
 method = 'VD';
 
 
+
+
+fout_tag = '_mIt250_cslBalanced';
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
+                {heteroscedastic, 'balanced', maxAttempts, inputNoise, method}}, machine )
+
+fout_tag = '_mIt250_Defaults';
+params = {heteroscedastic, csl_method, maxAttempts, inputNoise, method};
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
+                params}, machine )
+
+
+fout_tag = '_mIt250_0errs';
+fdat0 = strcat(base_path, 'data/CG_GPz_0errs_Roy.mtxt');
+[errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat0, maxIter, ...
+                {heteroscedastic, csl_method, maxAttempts, inputNoise, method}}, machine )
+
+
+
 % EXITS WITH ERROR
 % fout_tag = '_mIt250_methodVC';
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
 %                 {heteroscedastic, csl_method, maxAttempts, inputNoise, 'VC'}}, machine )
 
 
+
+
+% fs not done
+%
 % fout_tag = '_mIt250_cslBalncd_methodVC';
 % params = {heteroscedastic, 'balanced', maxAttempts, inputNoise, 'VC'};
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
 %                 params}, machine )
-
-
-
-% fs not done
+%
 %
 % fout_tag = '_mIt150_cslNormalized';
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
@@ -136,7 +157,6 @@ method = 'VD';
 % inputNoise = true;
 % method = 'VD';
 %
-%
 % fout_tag = '_mIt250_cslBalanced';
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
 %                 {heteroscedastic, 'balanced', maxAttempts, inputNoise, method}}, machine )
@@ -151,6 +171,5 @@ method = 'VD';
 % fdat0 = strcat(base_path, 'data/CG_GPz_0errs_Roy.mtxt');
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat0, maxIter, ...
 %                 {heteroscedastic, csl_method, maxAttempts, inputNoise, method}}, machine )
-%
 %
 % fe completed
