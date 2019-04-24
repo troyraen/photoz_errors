@@ -15,6 +15,7 @@ errcols = ['Nsamples', 'NMAD', 'out10', 'mse']
 
 
 def plot_errors(base_path='', flist=[], lgnd=[], styl=[], title='', fout=None):
+    # styl is really just colors
 
     f, axs = plt.subplots(sharex=True, nrows=1,ncols=2)
 
@@ -23,7 +24,11 @@ def plot_errors(base_path='', flist=[], lgnd=[], styl=[], title='', fout=None):
         ci = styl[i]
 
         # Get df from file
-        errdf = get_errdf(base_path+fin)
+        try:
+            errdf = get_errdf(base_path+fin)
+        except:
+            print('Errors data file not found. \n{}'.format(base_path+fin))
+            continue
         Nsamps = errdf.Nsamples
 
         # For each subplot
@@ -32,17 +37,24 @@ def plot_errors(base_path='', flist=[], lgnd=[], styl=[], title='', fout=None):
             axj = axs[j]
 
             # Scatter plot data
-            ls = ci+'o'
+            # ls = ci+'o'
             yerr = errdf[stat]
-            axj.semilogx(Nsamps, yerr, ls, label='')
+            axj.semilogx(Nsamps, yerr, 'o', c=ci, label='')
 
             # Do and plot the fit
-            ls = ci+'-'
-            [a,b,c] = get_fit(errdf, stat)
-            lbl = '{i}: {a}+{b}N^({c})'.format(i=lgnd[i], a=np.round(a,2), b=np.round(b,2), c=np.round(c,1))
-            NNN = np.logspace(np.log10(np.min(Nsamps)), np.log10(np.max(Nsamps)), 1000)
-            yfit = fit_fnc(NNN, a, b, c)
-            axj.semilogx(NNN, yfit, ls, label=lbl)
+            # ls = ci+'-'
+            try:
+                [a,b,c] = get_fit(errdf, stat)
+            except:
+                [a,b,c] = [0.0, 1.0, -0.5]
+                # print the legend
+                axj.semilogx(Nsamps, yerr, 'o', c=ci, label='{i}: (fit not found)'.format(i=lgnd[i]))
+                print('Problem fitting:\nstat {}\nfile {}'.format(stat,fin))
+            else:
+                lbl = '{i}: {a}+{b}N^({c})'.format(i=lgnd[i], a=np.round(a,2), b=np.round(b,2), c=np.round(c,1))
+                NNN = np.logspace(np.log10(np.min(Nsamps)), np.log10(np.max(Nsamps)), 1000)
+                yfit = fit_fnc(NNN, a, b, c)
+                axj.semilogx(NNN, yfit, '-', c=ci, label=lbl)
 
     # Labels, legends
     for j, stat in enumerate(stats):
@@ -67,6 +79,6 @@ def fit_fnc(N, a, b, c):
     return a+ b* (N**(c))
 
 def get_fit(df, stat):
-    c0 = (0.02, 0.75, -0.4)
+    c0 = (0.0, 1.0, -0.5)
     fit = curve_fit(fit_fnc, df['Nsamples'], df[stat], p0=c0)
     return fit[0]
