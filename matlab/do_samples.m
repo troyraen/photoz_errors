@@ -18,11 +18,11 @@ function [errs] = do_samples(Nsampszs, max_sampsz, Nruns, algor, fout_tag, apara
 fprintf('\nSetting up for algorithm %2s\n', algor)
 if machine == 'Kor'
     base_path = '/home/tjr63/Documents/photoz_errors/';
-    fdat = 'CGcolors'; % data file prefix
+    fdat = 'CGcolors'; % data file prefix. overridden below for GPz.
     test_N = 100000; % test sample size
 elseif machine == 'Roy'
     base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/';
-    fdat = 'CGsample'; % data file prefix
+    fdat = 'CGsample'; % data file prefix. overridden below for GPz.
     test_N = 10000; % test sample size
 else
     'MUST PASS machine TO do_samples'

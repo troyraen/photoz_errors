@@ -52,8 +52,22 @@ predict 12 hours for last sample size
 GPz
 started 9:50, mIt250_cslBalanced
 done 10:37
-
 10:39 start mIt250_methodVC
+crashed
+5:58 start
+6:05, done prepping data, on iter 38 of sample size 70000
+6:58 doing run 2, sample size 70000
+7:45 failed on sample size 200000, dataset too small
+7:52 start sample size 70000
+
+
+
+# See also
+
+http://lsst-desc.org/WorkingGroups/PZ
+
+http://lsst-desc.org/node/28
+
 
 # To Do:
 
@@ -212,3 +226,74 @@ See also: [createns](https://www.mathworks.com/help/stats/createns.html)
 
 # git
 Beetled59Expounded84crucially18dilemma's55protesting
+
+
+# Matlab crash report 4/24/19
+<!-- fs -->
+running mlterm from bash gave:
+```
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+--------------------------------------------------------------------------------
+      Floating point exception detected at Wed Apr 24 17:27:17 2019 -0400
+--------------------------------------------------------------------------------
+
+Configuration:
+  Crash Decoding           : Disabled - No sandbox or build area path
+  Crash Mode               : continue (default)
+  Default Encoding         : UTF-8
+  GNU C Library            : 2.17 stable
+  MATLAB Architecture      : glnxa64
+  MATLAB Root              : /usr/local/MATLAB/R2018b
+  MATLAB Version           : 9.5.0.944444 (R2018b)
+  Operating System         : "Scientific Linux release 7.6 (Nitrogen)"
+  Process ID               : 37884
+  Processor ID             : x86 Family 6 Model 63 Stepping 2, GenuineIntel
+  Session Key              : b32f3aa6-828b-42be-8ff9-91789a46e6e7
+  Static TLS mitigation    : Disabled: Unnecessary 1
+
+Fault Count: 3
+
+
+Abnormal termination
+
+Register State (from fault):
+  RAX = 000017577acb733c  RBX = 0000000000000400
+  RCX = 00007fa0431e3cd8  RDX = 0000000000000000
+  RSP = 00007fa020ef2b08  RBP = 0000000000000001
+  RSI = 00007fa0431dbc10  RDI = 00007fa0431de210
+
+   R8 = 00007fa0431dbb94   R9 = 0000000000000001
+  R10 = 0000000000000002  R11 = 0000000000000246
+  R12 = 0000000000000000  R13 = 00007fa0431dba54
+  R14 = 00007fa042ee7c40  R15 = 00007fa0431dba40
+
+  RIP = 00007fa042f20e76  EFL = 0000000000010246
+
+   CS = 0033   FS = 0000   GS = 0000
+
+Stack Trace (from fault):
+[  0] 0x00007fa042f20e76 /usr/local/MATLAB/R2018b/bin/glnxa64/../../sys/os/glnxa64/libiomp5.so+00740982
+[  1] 0x00007fa042ecfee6 /usr/local/MATLAB/R2018b/bin/glnxa64/../../sys/os/glnxa64/libiomp5.so+00409318 __kmp_wait_yield_4+00000166
+[  2] 0x00007fa042ee6920 /usr/local/MATLAB/R2018b/bin/glnxa64/../../sys/os/glnxa64/libiomp5.so+00502048 __kmp_acquire_ticket_lock+00000064
+[  3] 0x00007fa042eec4e5 /usr/local/MATLAB/R2018b/bin/glnxa64/../../sys/os/glnxa64/libiomp5.so+00525541
+[  4] 0x00007fa042ec902a /usr/local/MATLAB/R2018b/bin/glnxa64/../../sys/os/glnxa64/libiomp5.so+00380970 ompc_set_num_threads+00000010
+[  5] 0x00007fa062f1593e   /usr/local/MATLAB/R2018b/bin/glnxa64/libtbb.so.2+00178494
+[  6] 0x00007fa062f140b4   /usr/local/MATLAB/R2018b/bin/glnxa64/libtbb.so.2+00172212
+[  7] 0x00007fa062f0d039   /usr/local/MATLAB/R2018b/bin/glnxa64/libtbb.so.2+00143417
+[  8] 0x00007fa062f0af8f   /usr/local/MATLAB/R2018b/bin/glnxa64/libtbb.so.2+00135055
+[  9] 0x00007fa062f06616   /usr/local/MATLAB/R2018b/bin/glnxa64/libtbb.so.2+00116246
+[ 10] 0x00007fa062f065a6   /usr/local/MATLAB/R2018b/bin/glnxa64/libtbb.so.2+00116134
+[ 11] 0x00007fa066a52dd5                             /lib64/libpthread.so.0+00032213
+[ 12] 0x00007fa06830dead                                   /lib64/libc.so.6+01040045 clone+00000109
+[ 13] 0x0000000000000000                                   <unknown-module>+00000000
+
+** This crash report has been saved to disk as /home/tjr63/matlab_crash_dump.37884-1 **
+
+
+
+MATLAB is exiting because of fatal error
+Killed
+
+```
+<!-- fe # Matlab crash report 4/24/19 -->

@@ -144,15 +144,15 @@ __all__
 import plot_errors as pe
 import helper_fncs as hf
 base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
-flist = ['errorsNN_2x10.mtxt', 'errorsNN_3x15.mtxt', 'errorsNN_3x50_e200mf50.mtxt', 'errorsGPz__3x15_e200mf50_transFposlin.mtxt']
-lgnd = ['NN_2x10', 'NN_3x15', 'NN_3x50', 'NN_RELU']
-styl = ['c', 'dodgerblue', 'b', 'darkblue']
-title = 'NN: Errors in Photo_z estimates'
+flist = ['errorsNN_2x10.mtxt', 'errorsNN_3x15.mtxt', 'errorsNN_3x50_e200mf50.mtxt', 'errorsNN_3x15_e200mf50_transFposlin.mtxt']
+lgnd = ['2x10', '3x15', '3x50', 'RELU']
+styl = ['c', 'royalblue', 'darkblue', 'purple']
+title = '' # 'NN: Errors in Photo_z estimates'
 fout = base_path+'errors_plots/errors_NN.png'
 fout_ow = hf.file_ow(fout)
 pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
 ```
-<img src="../data/errors_plots/errors_NN.png" alt="errors_NN" width="500"/>
+<img src="../data/errors_plots/errors_NN.png" alt="errors_NN" width="900"/>
 
 __2x10__
 <img src="plots/errorsNN_2x10.png" alt="errorsNN_2x10" width="500"/>
@@ -172,12 +172,12 @@ base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/data/'
 flist = ['errorsGPz_mIt250_Defaults.mtxt', 'errorsGPz_mIt250_cslBalanced.mtxt', 'errorsGPz_mIt250_methodVC.mtxt', 'errorsGPz_mIt250_0errs.mtxt', 'errorsGPz.mtxt']
 lgnd = ['Defaults', "'balanced' errors", 'variable covariance', 'input errors = 0', 'Main run']
 styl = ['c', 'g', 'b', 'purple', '0.75']
-title = 'GPz: Errors in Photo_z estimates'
+title = '' # 'GPz: Errors in Photo_z estimates'
 fout = base_path+'errors_plots/errors_GPz.png'
 fout_ow = hf.file_ow(fout)
 pe.plot_errors(base_path=base_path, flist=flist, lgnd=lgnd, styl=styl, title=title, fout=fout)
 ```
-<img src="../data/errors_plots/errors_GPz.png" alt="errors_GPz" width="500"/>
+<img src="../data/errors_plots/errors_GPz.png" alt="errors_GPz" width="900"/>
 
 
 <img src="plots/errorsGPz.png" alt="errorsGPz" width="500"/>

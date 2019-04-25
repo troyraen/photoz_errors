@@ -11,10 +11,10 @@ ccols = {'id','redshift','u10','u10_m_g10','g10_m_r10','r10_m_i10', ...
 
 
 Nsampszs = 2;
-max_sampsz = 200000;
-# start at 70000; AND APPEND
-Nruns = 2;
-machine = 'Kor';
+max_sampsz = 100000;
+% # start at 70000; AND APPEND
+Nruns = 1;
+machine = 'Roy';
 
 %%% GPz
 'DOING GPz'
@@ -26,7 +26,8 @@ machine = 'Kor';
 %
 % fdat = '../GPz/data/sdss_sample.csv'
 % base_path = '/home/tjr63/Documents/photoz_errors/';
-fdat = '../data/CG_GPz.mtxt');
+base_path = '/Users/troyraen/Korriban/Documents/photoz_errors/';
+fdat = strcat(base_path, 'data/CG_GPz_Roy.mtxt');
 maxIter = 250; % default 200
 
 % defaults:
@@ -56,12 +57,28 @@ fdat0 = strcat(base_path, 'data/CG_GPz_0errs_Roy.mtxt');
 
 
 
-% EXITS WITH ERROR
+%%% EXITS WITH ERROR
 % fout_tag = '_mIt250_methodVC';
 % [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
 %                 {heteroscedastic, csl_method, maxAttempts, inputNoise, 'VC'}}, machine )
-
-
+%%% EXITS WITH THE FOLLOWING ERROR:
+% 'Computing Metrics ...'
+%
+%
+% The logical indices in position 3 contain a true value outside of the array bounds.
+%
+% Error in predict (line 29)
+%          Psi = Psi(:,:,selection);
+%
+% Error in do_fitGPz (line 97)
+% [mu,sigma,nu,beta_i,gamma] = predict(X,model,'Psi',Psi,'selection',testing);
+%
+% Error in do_samples (line 106)
+%          [other, test_specz, mse, test_photz] = do_fitGPz(fdat, maxIter, Nexamples, GPz_params);
+%
+% Error in predict_photoz_testGPz (line 52)
+% [errs] = do_samples(Nsampszs, max_sampsz, Nruns, 'GPz', fout_tag, {fdat, maxIter, ...
+%%%
 
 
 % fs not done
