@@ -1,6 +1,4 @@
 *.m linguist-language=Matlab
 ANNZ/* linguist-vendored
-*.c linguist-vendored
-*.h linguist-vendored
 *.tex linguist-vendored
 external_codes/* linguist-vendored
